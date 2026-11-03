@@ -1,0 +1,88 @@
+import type { AiApp } from '@/core/types';
+
+/** Sample catalogue – swap for an API call in the feature hooks. */
+export const APPS: AiApp[] = [
+  {
+    id: 'uob-assist', name: 'UOB Assist', icon: 'sparkles', hue: 215,
+    tagline: 'Your secure, bank-approved AI assistant',
+    description: 'A governed GenAI assistant for drafting, summarising, translating and analysing documents. Runs inside the UOB perimeter — prompts and files never leave the bank.',
+    category: 'Productivity', status: 'Live', access: 'All staff', ownerId: 'u-2', department: 'Group Technology & Operations',
+    monthlyUsers: 18420, rating: 4.7, tags: ['Chat', 'Summarise', 'Translate'],
+    capabilities: ['Document Q&A', 'Meeting summaries', 'Multilingual drafting', 'Data stays on-prem'],
+    url: '#', updated: '2026-10-28',
+  },
+  {
+    id: 'credit-copilot', name: 'Credit Copilot', icon: 'landmark', hue: 350,
+    tagline: 'Faster credit memos with traceable sources',
+    description: 'Drafts credit application sections from financial statements and approved templates, with every figure linked back to source documents for reviewer sign-off.',
+    category: 'Risk & Compliance', status: 'Live', access: 'Request access', ownerId: 'u-1', department: 'Group Risk Management',
+    monthlyUsers: 1260, rating: 4.5, tags: ['Credit', 'Underwriting', 'Wholesale'],
+    capabilities: ['Source-linked drafting', 'Ratio analysis', 'Policy checks', 'Audit trail'],
+    url: '#', updated: '2026-10-21',
+  },
+  {
+    id: 'reg-radar', name: 'RegRadar', icon: 'shield', hue: 160,
+    tagline: 'Track regulatory change that affects your desk',
+    description: 'Monitors MAS, BNM, OJK and other regulator publications, then maps each change to impacted policies, products and owners.',
+    category: 'Risk & Compliance', status: 'Live', access: 'All staff', ownerId: 'u-5', department: 'Group Compliance',
+    monthlyUsers: 2310, rating: 4.4, tags: ['Regulation', 'Horizon scanning'],
+    capabilities: ['Multi-jurisdiction feeds', 'Impact mapping', 'Owner alerts', 'Weekly digest'],
+    url: '#', updated: '2026-10-30',
+  },
+  {
+    id: 'service-sense', name: 'ServiceSense', icon: 'headset', hue: 265,
+    tagline: 'Real-time guidance for customer conversations',
+    description: 'Suggests next-best responses and surfaces relevant product and policy knowledge to contact-centre and branch teams while they serve customers.',
+    category: 'Customer Experience', status: 'Beta', access: 'Request access', ownerId: 'u-3', department: 'Personal Financial Services',
+    monthlyUsers: 3120, rating: 4.2, tags: ['Contact centre', 'Knowledge'],
+    capabilities: ['Live suggestions', 'Knowledge retrieval', 'Call summarisation', 'Quality insights'],
+    url: '#', updated: '2026-10-14',
+  },
+  {
+    id: 'code-pilot', name: 'CodePilot', icon: 'code', hue: 195,
+    tagline: 'AI pair-programming approved for UOB codebases',
+    description: 'IDE assistant for code generation, review and test creation, with secrets scanning and licence checks built in.',
+    category: 'Engineering', status: 'Live', access: 'All staff', ownerId: 'u-2', department: 'Group Technology & Operations',
+    monthlyUsers: 4870, rating: 4.6, tags: ['IDE', 'Testing', 'Review'],
+    capabilities: ['Code completion', 'Unit test generation', 'PR review', 'Secrets scanning'],
+    url: '#', updated: '2026-10-25',
+  },
+  {
+    id: 'insight-studio', name: 'Insight Studio', icon: 'chart', hue: 30,
+    tagline: 'Ask questions of your data in plain English',
+    description: 'Natural-language analytics over governed datasets. Generates SQL, charts and narrative while honouring row-level data entitlements.',
+    category: 'Data & Analytics', status: 'Live', access: 'Request access', ownerId: 'u-4', department: 'Group Data Office',
+    monthlyUsers: 2040, rating: 4.3, tags: ['NL2SQL', 'BI', 'Dashboards'],
+    capabilities: ['Natural-language queries', 'Auto charts', 'Entitlement-aware', 'Export to slides'],
+    url: '#', updated: '2026-10-18',
+  },
+  {
+    id: 'doc-intel', name: 'DocIntel', icon: 'file', hue: 100,
+    tagline: 'Extract structured data from any document',
+    description: 'Reads trade documents, KYC packs and contracts, extracts key fields with confidence scores, and routes exceptions to human review.',
+    category: 'Operations', status: 'Live', access: 'All staff', ownerId: 'u-6', department: 'Wholesale Banking',
+    monthlyUsers: 1730, rating: 4.1, tags: ['OCR', 'KYC', 'Trade finance'],
+    capabilities: ['Field extraction', 'Confidence scoring', 'Human-in-loop', 'Workflow hand-off'],
+    url: '#', updated: '2026-09-30',
+  },
+  {
+    id: 'meeting-minds', name: 'MeetingMinds', icon: 'mic', hue: 330,
+    tagline: 'Minutes and action items, done before you leave the room',
+    description: 'Transcribes and summarises meetings, extracting decisions and action items and pushing them to your task tool.',
+    category: 'Productivity', status: 'Pilot', access: 'Request access', ownerId: 'u-7', department: 'Group Human Resources',
+    monthlyUsers: 640, rating: 4.0, tags: ['Meetings', 'Actions'],
+    capabilities: ['Transcription', 'Action items', 'Calendar sync', 'Multilingual'],
+    url: '#', updated: '2026-10-09',
+  },
+  {
+    id: 'fraud-lens', name: 'FraudLens', icon: 'search', hue: 5,
+    tagline: 'Spot suspicious patterns and explain why',
+    description: 'Assists investigators by clustering related alerts, summarising case narratives and explaining model-driven risk signals in plain language.',
+    category: 'Risk & Compliance', status: 'Beta', access: 'Request access', ownerId: 'u-1', department: 'Group Risk Management',
+    monthlyUsers: 410, rating: 4.3, tags: ['Fraud', 'Investigations', 'AML'],
+    capabilities: ['Alert clustering', 'Case summaries', 'Explainable signals', 'Case export'],
+    url: '#', updated: '2026-10-02',
+  },
+];
+
+export const APP_CATEGORIES = Array.from(new Set(APPS.map((a) => a.category)));

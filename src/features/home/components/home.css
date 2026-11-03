@@ -1,0 +1,45 @@
+.home-hero { position: relative; overflow: hidden; border-radius: var(--radius-lg); color: #fff; padding: 56px 52px; background: linear-gradient(120deg, var(--uob-blue-900) 0%, var(--uob-blue-700) 60%, var(--uob-blue-600) 100%); display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; }
+.home-hero::before { content: ''; position: absolute; left: 0; bottom: 0; width: 100%; height: 5px; background: linear-gradient(90deg, transparent 60%, var(--uob-red) 60%); }
+.hero-copy { display: flex; flex-direction: column; gap: 14px; position: relative; z-index: 2; }
+.hero-copy .eyebrow { display: inline-flex; gap: 6px; align-items: center; text-transform: uppercase; letter-spacing: .14em; font-size: 12px; font-weight: 700; color: #ffb3bd; }
+.hero-copy h1 { font-size: 42px; line-height: 1.1; letter-spacing: -.03em; }
+.hero-copy p { max-width: 560px; opacity: .88; font-size: 16px; }
+.hero-copy em { font-style: normal; opacity: .7; }
+.btn-hero-ghost { background: rgba(255,255,255,.12); color: #fff; border-color: rgba(255,255,255,.35); }
+.btn-hero-ghost:hover { background: rgba(255,255,255,.22); }
+.hero-art { position: relative; min-height: 220px; }
+.orb { position: absolute; border-radius: 50%; filter: blur(2px); }
+.o1 { width: 220px; height: 220px; right: 20px; top: -10px; background: radial-gradient(circle at 30% 30%, #5f8de0, transparent 70%); }
+.o2 { width: 160px; height: 160px; right: 150px; bottom: -20px; background: radial-gradient(circle at 30% 30%, #ff5a70, transparent 70%); opacity: .8; }
+.o3 { width: 90px; height: 90px; right: 0; bottom: 20px; border: 2px solid rgba(255,255,255,.35); }
+@media (max-width: 860px) { .home-hero { grid-template-columns: 1fr; padding: 32px 24px; } .hero-copy h1 { font-size: 30px; } .hero-art { display: none; } }
+
+.persona-panel { display: flex; align-items: center; gap: 16px; padding: 18px 22px; border-left: 4px solid var(--uob-red); flex-wrap: wrap; }
+.persona-ico { width: 46px; height: 46px; border-radius: 14px; background: var(--uob-blue-100); color: var(--uob-blue-700); display: grid; place-items: center; }
+.persona-panel h3 { font-size: 16px; }
+
+.theme-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.theme-card { border-radius: var(--radius-lg); padding: 28px; display: flex; flex-direction: column; gap: 10px; transition: .2s; border: 1px solid var(--border); background: var(--surface); box-shadow: var(--shadow-sm); }
+.theme-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+.theme-icon { width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; background: var(--uob-blue-100); color: var(--uob-blue-700); }
+.theme-card.red .theme-icon { background: var(--uob-red-100); color: var(--uob-red); }
+.theme-card.navy .theme-icon { background: var(--uob-blue-800); color: #fff; }
+.theme-card h3 { font-size: 22px; margin-top: 6px; }
+.theme-card p { color: var(--text-2); font-size: 14px; flex: 1; }
+.theme-cta { display: inline-flex; gap: 6px; align-items: center; font-weight: 700; color: var(--uob-blue-700); font-size: 14px; }
+
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+.kpi { padding: 18px 20px; display: flex; flex-direction: column; gap: 2px; }
+.kpi-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--uob-blue-50); color: var(--uob-blue-700); display: grid; place-items: center; }
+.kpi-value { font-size: 32px; font-weight: 800; letter-spacing: -.03em; color: var(--uob-blue-800); margin-top: 8px; }
+.kpi-label { font-size: 14px; color: var(--text-2); }
+.kpi-delta { font-size: 12px; font-weight: 600; color: var(--green); margin-top: 4px; }
+
+.home-split { display: grid; grid-template-columns: 1.5fr 1fr; gap: 28px; align-items: start; }
+@media (max-width: 1000px) { .home-split { grid-template-columns: 1fr; } }
+.chart { display: flex; align-items: flex-end; gap: 14px; height: 210px; padding-top: 8px; }
+.chart-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 6px; }
+.chart-bar { width: 100%; max-width: 48px; border-radius: 8px 8px 3px 3px; background: linear-gradient(180deg, var(--uob-blue-600), var(--uob-blue-800)); min-height: 6px; transition: height .4s; }
+.chart-val { font-size: 12px; font-weight: 700; color: var(--text-2); }
+.chart-lbl { font-size: 12px; color: var(--text-3); }
+.chart-col:last-child .chart-bar { background: linear-gradient(180deg, #ff5a70, var(--uob-red)); }

@@ -1,0 +1,31 @@
+/* Design tokens. UOB brand colours are approximations – confirm against the UOB brand guidelines. */
+:root {
+  --uob-blue-900: #061b45;
+  --uob-blue-800: #0a2a6b;
+  --uob-blue-700: #0b3a8d;
+  --uob-blue-600: #1450b8;
+  --uob-blue-100: #e6edfa;
+  --uob-blue-50: #f2f6fd;
+  --uob-red: #d6112b;
+  --uob-red-100: #fde8eb;
+
+  --bg: #f5f7fb;
+  --surface: #ffffff;
+  --surface-2: #f8fafd;
+  --border: #e2e8f2;
+  --text: #0f1b33;
+  --text-2: #4a5878;
+  --text-3: #7584a3;
+
+  --green: #0f8a5f; --green-bg: #e3f6ee;
+  --amber: #b26a00; --amber-bg: #fff2d9;
+  --red: #c4132a; --red-bg: #fde8eb;
+
+  --radius-sm: 8px; --radius: 14px; --radius-lg: 20px;
+  --shadow-sm: 0 1px 2px rgba(10, 30, 80, .06);
+  --shadow: 0 4px 16px rgba(10, 30, 80, .08);
+  --shadow-lg: 0 18px 48px rgba(10, 30, 80, .16);
+  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --header-h: 68px;
+  --max-w: 1280px;
+}

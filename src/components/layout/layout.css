@@ -1,0 +1,28 @@
+.skip-link { position: absolute; left: -999px; top: 8px; background: #fff; padding: 8px 14px; border-radius: 8px; z-index: 200; }
+.skip-link:focus { left: 8px; }
+.site-header { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.88); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+.site-header::before { content: ''; display: block; height: 3px; background: linear-gradient(90deg, var(--uob-blue-800) 70%, var(--uob-red) 70%); }
+.header-inner { height: var(--header-h); display: flex; align-items: center; gap: 28px; }
+.brand { display: flex; align-items: center; gap: 14px; }
+.brand-divider { width: 1px; height: 24px; background: var(--border); }
+.brand-name { font-weight: 700; font-size: 17px; color: var(--uob-blue-800); letter-spacing: -.01em; }
+.main-nav { display: flex; gap: 4px; flex: 1; }
+.nav-link { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; font-weight: 600; font-size: 14px; color: var(--text-2); transition: .15s; }
+.nav-link:hover { background: var(--uob-blue-50); color: var(--uob-blue-700); }
+.nav-link.active { background: var(--uob-blue-700); color: #fff; }
+.header-right { display: flex; align-items: center; gap: 16px; }
+.me { display: flex; align-items: center; gap: 10px; }
+.me-text { display: flex; flex-direction: column; line-height: 1.2; font-size: 13px; }
+.me-text span { color: var(--text-3); font-size: 12px; }
+.persona-switch { display: flex; align-items: center; gap: 6px; border: 1px dashed #c3cfe6; border-radius: 999px; padding: 4px 10px; color: var(--text-2); }
+.persona-switch select { border: none; background: transparent; font-weight: 600; font-size: 13px; }
+@media (max-width: 900px) {
+  .header-inner { flex-wrap: wrap; height: auto; padding: 10px 16px; gap: 10px; }
+  .main-nav { order: 3; width: 100%; overflow-x: auto; }
+  .me-text { display: none; }
+  .header-right { margin-left: auto; }
+}
+.site-footer { background: var(--uob-blue-900); color: #c9d5ef; padding: 36px 0; margin-top: 24px; }
+.footer-inner { display: flex; flex-direction: column; gap: 12px; font-size: 13px; }
+.footer-inner .muted-light { opacity: .7; font-weight: 600; }
+.footer-inner .small { opacity: .6; font-size: 12px; }
