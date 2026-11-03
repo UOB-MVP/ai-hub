@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 import type {
-  AccessRequest, AiApp, AppCategory, AppFeedback, AppLifecycle, RequestStatus, UserStatus,
+  AccessRequest, AiApp, AppCategory, AppFeedback, AppHosting, AppLifecycle, RequestStatus, UserStatus,
 } from './types';
 import { APPS } from '@/data/apps';
 import { SEED_REQUESTS } from '@/data/requests';
@@ -19,6 +19,7 @@ interface PlatformState {
   publishApp: (id: string) => void;
   retireApp: (id: string, note: string) => void;
   createPlaceholder: (name: string, category: AppCategory) => void;
+  submitApp: (input: { name: string; category: AppCategory; description: string; hosting: AppHosting; raiEvidence?: string; ownerId?: string }) => void;
   assignOwner: (id: string, ownerId: string) => void;
   toggleFeatured: (id: string) => void;
 
@@ -80,6 +81,22 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
         version: '—', releaseDate: '—', whatsNew: [], supportContact: '—',
         rating: 0, ratingCount: 0, upvotes: 0, userCount: 0, health: 'healthy', raiStatus: 'pending',
         tokenUsage30d: 0, requests30d: 0, dau: 0,
+      },
+      ...prev,
+    ]);
+  }, []);
+
+  const submitApp = useCallback((input: { name: string; category: AppCategory; description: string; hosting: AppHosting; raiEvidence?: string; ownerId?: string }) => {
+    const id = `app-${Date.now()}`;
+    setApps((prev) => [
+      {
+        id, name: input.name, icon: 'sparkles', hue: 240, lifecycle: 'onboarding',
+        tagline: input.description.slice(0, 80), description: input.description,
+        category: input.category, status: 'Pilot', access: 'Request access', ownerId: input.ownerId ?? CURRENT_USER.id, department: '—',
+        tags: [], capabilities: [], url: '#', hosting: input.hosting,
+        version: 'v0.1', releaseDate: new Date().toISOString().slice(0, 10), whatsNew: [], supportContact: '—',
+        rating: 0, ratingCount: 0, upvotes: 0, userCount: 0, health: 'healthy', raiStatus: 'pending',
+        tokenUsage30d: 0, requests30d: 0, dau: 0, raiEvidence: input.raiEvidence,
       },
       ...prev,
     ]);
@@ -149,12 +166,12 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
   const publishedApps = useMemo(() => apps.filter((a) => a.lifecycle === 'published'), [apps]);
 
   const value = useMemo<PlatformState>(() => ({
-    apps, publishedApps, getApp, updateApp, setLifecycle, publishApp, retireApp, createPlaceholder, assignOwner, toggleFeatured,
+    apps, publishedApps, getApp, updateApp, setLifecycle, publishApp, retireApp, createPlaceholder, submitApp, assignOwner, toggleFeatured,
     requests, requestsForApp, requestsForUser, submitAccessRequest, resolveRequest, hasAccess, isRequested,
     feedback, feedbackForApp, addFeedback,
     users, setUserStatus,
     usageForApp, usageForUser,
-  }), [apps, publishedApps, getApp, updateApp, setLifecycle, publishApp, retireApp, createPlaceholder, assignOwner, toggleFeatured,
+  }), [apps, publishedApps, getApp, updateApp, setLifecycle, publishApp, retireApp, createPlaceholder, submitApp, assignOwner, toggleFeatured,
     requests, requestsForApp, requestsForUser, submitAccessRequest, resolveRequest, hasAccess, isRequested,
     feedback, feedbackForApp, addFeedback, users, setUserStatus, usageForApp, usageForUser]);
 

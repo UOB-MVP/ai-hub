@@ -79,6 +79,8 @@ export interface AiApp {
   dau: number;
   tokenLimitPerUser?: number;
   requestLimitPerUser?: number;
+  /** Reference to evidence captured for applicable Responsible AI guardrails, recorded at onboarding. */
+  raiEvidence?: string;
 }
 
 export interface AppFeedback {
