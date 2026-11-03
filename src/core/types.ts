@@ -24,13 +24,7 @@ export interface User {
 }
 
 /* ---------- Apps ---------- */
-export type AppCategory =
-  | 'Productivity'
-  | 'Risk & Compliance'
-  | 'Customer Experience'
-  | 'Engineering'
-  | 'Data & Analytics'
-  | 'Operations';
+export type AppCategory = 'Recovery' | 'Employee Services' | 'Branch Banking' | 'Document Processing';
 
 export type AppStatus = 'Live' | 'Beta' | 'Pilot';
 export type AppAccess = 'All staff' | 'Request access';
@@ -45,12 +39,10 @@ export interface AiApp {
   access: AppAccess;
   ownerId: string;
   department: string;
-  monthlyUsers: number;
-  rating: number;
+  featured?: boolean;
   tags: string[];
   capabilities: string[];
   url: string;
-  updated: string;
   /** lucide icon key – see components/ui/AppIcon */
   icon: string;
   hue: number;

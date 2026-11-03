@@ -3,7 +3,7 @@ import { Avatar, Badge, Button, Modal } from '@/components/ui';
 import { AppIcon } from '@/components/ui/AppIcon';
 import type { AiApp } from '@/core/types';
 import { getUser } from '@/data/users';
-import { compact, statusTone } from './AppCard';
+import { statusTone } from './AppCard';
 
 interface Props { app: AiApp; hasAccess: boolean; requested: boolean; onClose: () => void; onLaunch: (a: AiApp) => void; onRequest: (a: AiApp) => void }
 
@@ -45,8 +45,6 @@ export function AppDetailModal({ app, hasAccess, requested, onClose, onLaunch, o
         <div className="detail-meta">
           <div><span>Owner</span><div className="row" style={{ gap: 8 }}><Avatar name={owner.name} color={owner.avatarColor} size={26} /><strong>{owner.name}</strong></div></div>
           <div><span>Department</span><strong>{app.department}</strong></div>
-          <div><span>Monthly users</span><strong>{compact(app.monthlyUsers)}</strong></div>
-          <div><span>Last updated</span><strong>{app.updated}</strong></div>
         </div>
       </div>
     </Modal>

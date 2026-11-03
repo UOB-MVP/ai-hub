@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { AppWindow, BookOpen } from 'lucide-react';
 import { PageHero, SearchInput, Tabs, EmptyState } from '@/components/ui';
 import { AppCatalogue } from '@/components/apps/AppCatalogue';
+import { LearningAreaCards } from '@/components/learn/LearningAreaCards';
 import { ContentCard } from '@/features/learn/components/ContentCard';
 import { useContent } from '@/core/ContentContext';
 import { useAppFilters } from './hooks';
@@ -27,7 +28,7 @@ export function DiscoverPage() {
         <Tabs
           tabs={[
             { id: 'apps' as Scope, label: 'AI apps', icon: <AppWindow size={16} />, count: f.apps.length },
-            { id: 'learning' as Scope, label: 'Learning content', icon: <BookOpen size={16} />, count: learning.length },
+            { id: 'learning' as Scope, label: 'Learning content', icon: <BookOpen size={16} />, count: learning.length || undefined },
           ]}
           value={scope}
           onChange={setScope}
@@ -37,10 +38,12 @@ export function DiscoverPage() {
             <AppFilters category={f.category} onCategory={f.setCategory} status={f.status} onStatus={f.setStatus} sort={f.sort} onSort={f.setSort} total={f.apps.length} />
             <AppCatalogue apps={f.apps} mode="discover" />
           </>
-        ) : learning.length ? (
-          <div className="grid grid-2">{learning.map((i) => <ContentCard key={i.id} item={i} />)}</div>
         ) : (
-          <EmptyState title="No learning content found" message="Try a different search." />
+          <>
+            {!f.query && <LearningAreaCards />}
+            {learning.length > 0 && <div className="grid grid-2">{learning.map((i) => <ContentCard key={i.id} item={i} />)}</div>}
+            {f.query && !learning.length && <EmptyState title="No learning content found" message="Try a different search." />}
+          </>
         )}
       </div>
     </>

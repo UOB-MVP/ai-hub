@@ -1,10 +1,9 @@
 import { HomeHero } from './components/HomeHero';
 import { PersonaPanel } from './components/PersonaPanel';
-import { KpiStrip } from './components/KpiStrip';
 import { ThemeCards } from './components/ThemeCards';
-import { TrendingApps } from './components/TrendingApps';
-import { UsageChart } from './components/UsageChart';
-import { LearningSpotlight } from './components/LearningSpotlight';
+import { FeaturedApps } from './components/FeaturedApps';
+import { SectionHeader } from '@/components/ui';
+import { LearningAreaCards } from '@/components/learn/LearningAreaCards';
 
 export function HomePage() {
   return (
@@ -12,12 +11,11 @@ export function HomePage() {
       <HomeHero />
       <PersonaPanel />
       <ThemeCards />
-      <KpiStrip />
-      <TrendingApps />
-      <div className="home-split">
-        <LearningSpotlight />
-        <UsageChart />
-      </div>
+      <FeaturedApps />
+      <section>
+        <SectionHeader title="Learn" subtitle="Prompts, news and use cases to grow your AI skills" />
+        <LearningAreaCards />
+      </section>
     </>
   );
 }

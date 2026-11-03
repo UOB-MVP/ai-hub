@@ -1,11 +1,10 @@
-import { ArrowUpRight, Star, Users } from 'lucide-react';
+import { ArrowUpRight, Lock, Unlock } from 'lucide-react';
 import { AppIcon } from '@/components/ui/AppIcon';
 import { Badge, Button } from '@/components/ui';
 import type { AiApp } from '@/core/types';
 import './apps.css';
 
 export const statusTone = (s: AiApp['status']) => (s === 'Live' ? 'green' : s === 'Beta' ? 'amber' : 'grey');
-export const compact = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(1).replace('.0', '')}k` : `${n}`);
 
 interface Props {
   app: AiApp;
@@ -31,8 +30,7 @@ export function AppCard({ app, onOpen, action, hasAccess = true }: Props) {
         <div className="chips tags">{app.tags.map((t) => <span key={t} className="badge badge-grey">{t}</span>)}</div>
       </button>
       <div className="app-card-foot">
-        <span className="stat"><Users size={14} />{compact(app.monthlyUsers)}</span>
-        <span className="stat"><Star size={14} fill="currentColor" />{app.rating.toFixed(1)}</span>
+        <span className="stat">{app.access === 'All staff' ? <><Unlock size={14} />All staff</> : <><Lock size={14} />Request access</>}</span>
         <span className="grow" />
         {action ? (
           <Button size="sm" variant={hasAccess ? action.variant ?? 'primary' : 'ghost'} onClick={() => action.onClick(app)}>

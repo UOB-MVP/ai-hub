@@ -27,7 +27,7 @@ export function AppFilters({ category, onCategory, status, onStatus, sort, onSor
         <span className="muted" style={{ fontSize: 14 }}>{total} app{total === 1 ? '' : 's'}</span>
         <label className="row" style={{ gap: 8, fontSize: 14 }}>Sort
           <select value={sort} onChange={(e) => onSort(e.target.value as AppSort)} style={{ border: '1px solid var(--border)', borderRadius: 10, padding: '6px 10px', background: 'var(--surface)' }}>
-            <option value="popular">Most used</option><option value="rating">Top rated</option><option value="recent">Recently updated</option><option value="name">A–Z</option>
+            <option value="featured">Featured first</option><option value="name">A–Z</option>
           </select>
         </label>
       </div>

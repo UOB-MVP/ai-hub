@@ -54,6 +54,10 @@ export function LearnPage() {
   useEffect(() => { if (wantsReview) f.setView('review'); else if (f.view === 'review' && !params.get('view')) f.setView('all'); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wantsReview]);
 
+  const typeParam = params.get('type') as LearnView | null;
+  useEffect(() => { if (typeParam) f.setView(typeParam); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [typeParam]);
+
   const isFeed = f.view !== 'mine' && f.view !== 'review';
   const hasFilters = f.category || f.authorId || f.query;
 

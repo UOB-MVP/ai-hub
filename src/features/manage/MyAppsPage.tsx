@@ -2,39 +2,38 @@ import { useState } from 'react';
 import { PackagePlus } from 'lucide-react';
 import { Badge, Button, EmptyState, Modal, PageHero, SectionHeader } from '@/components/ui';
 import { AppIcon } from '@/components/ui/AppIcon';
-import { compact, statusTone } from '@/components/apps/AppCard';
+import { statusTone } from '@/components/apps/AppCard';
 import { usePersona } from '@/core/PersonaContext';
 import { APPS, APP_CATEGORIES } from '@/data/apps';
 
-/** Owner view. Demo: apps owned by the signed-in user, or by Wei Jie Tan as sample data. */
+/** Owner view: apps owned by the signed-in user. */
 export function MyAppsPage() {
   const { user } = usePersona();
   const [open, setOpen] = useState(false);
   const [submitted, setSubmitted] = useState<string[]>([]);
   const [name, setName] = useState('');
-  const mine = APPS.filter((a) => a.ownerId === 'u-2' || a.ownerId === user.id);
-  const total = mine.reduce((s, a) => s + a.monthlyUsers, 0);
+  const mine = APPS.filter((a) => a.ownerId === user.id);
 
   return (
     <>
-      <PageHero eyebrow="App Owner" title="Manage your AI apps" description="Track adoption and feedback for the apps you own, and register new apps for publishing on the hub.">
+      <PageHero eyebrow="App Owner" title="Manage your AI apps" description="Keep track of the apps you own, and register new apps for publishing on the hub.">
         <div style={{ marginTop: 20 }}><Button variant="light" onClick={() => setOpen(true)}><PackagePlus size={16} />Register new app</Button></div>
       </PageHero>
 
       <section>
-        <SectionHeader title="Your portfolio" subtitle={`${mine.length} apps · ${compact(total)} monthly users`} />
+        <SectionHeader title="Your portfolio" subtitle={`${mine.length} apps`} />
         <div className="card" style={{ overflow: 'auto' }}>
           <table className="table">
-            <thead><tr><th>App</th><th>Status</th><th>Access</th><th>Monthly users</th><th>Rating</th><th>Updated</th></tr></thead>
+            <thead><tr><th>App</th><th>Status</th><th>Access</th><th>Department</th></tr></thead>
             <tbody>
               {mine.map((a) => (
                 <tr key={a.id}>
                   <td><div className="row" style={{ gap: 10 }}><AppIcon name={a.icon} hue={a.hue} size={34} /><strong>{a.name}</strong></div></td>
-                  <td><Badge tone={statusTone(a.status)}>{a.status}</Badge></td><td>{a.access}</td><td>{a.monthlyUsers.toLocaleString()}</td><td>★ {a.rating}</td><td>{a.updated}</td>
+                  <td><Badge tone={statusTone(a.status)}>{a.status}</Badge></td><td>{a.access}</td><td>{a.department}</td>
                 </tr>
               ))}
               {submitted.map((n) => (
-                <tr key={n}><td><strong>{n}</strong></td><td><Badge tone="amber">Pending approval</Badge></td><td>—</td><td>—</td><td>—</td><td>Today</td></tr>
+                <tr key={n}><td><strong>{n}</strong></td><td><Badge tone="amber">Pending approval</Badge></td><td>—</td><td>—</td></tr>
               ))}
             </tbody>
           </table>

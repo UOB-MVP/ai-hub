@@ -11,13 +11,13 @@ export function PersonaPanel() {
   const { persona, user } = usePersona();
   const { items } = useContent();
   const pending = items.filter((i) => i.status === 'draft' && i.authorId !== user.id).length;
-  const myApps = APPS.filter((a) => a.ownerId === 'u-2').length;
+  const myApps = APPS.filter((a) => a.ownerId === user.id).length;
 
   const panels: Record<PersonaId, { icon: typeof Sparkles; title: string; body: string; cta: string; to: string; stat?: string } | null> = {
     consumer: { icon: Sparkles, title: 'Get more from AI', body: 'New here? Start with “Your first 30 minutes with UOB Assist”.', cta: 'Start learning', to: '/learn' },
-    'app-owner': { icon: PackagePlus, title: 'Your apps', body: 'Track adoption and feedback for apps you own, or onboard a new one.', cta: 'Manage apps', to: '/my-apps', stat: `${myApps} apps live` },
+    'app-owner': { icon: PackagePlus, title: 'Your apps', body: 'Keep track of the apps you own, or onboard a new one.', cta: 'Manage apps', to: '/my-apps', stat: `${myApps} apps live` },
     'learning-moderator': { icon: ClipboardCheck, title: 'Review queue', body: 'Contributions are waiting for your review.', cta: 'Review now', to: '/learn?view=review', stat: `${pending} pending` },
-    'platform-admin': { icon: ShieldCheck, title: 'Platform governance', body: 'Approvals, app onboarding and platform health at a glance.', cta: 'Open admin view', to: '/admin', stat: `${pending} content · 2 app requests` },
+    'platform-admin': { icon: ShieldCheck, title: 'Platform governance', body: 'Approvals, app onboarding and roles at a glance.', cta: 'Open admin view', to: '/admin', stat: `${pending} content pending` },
   };
   const p = panels[persona.id];
   if (!p) return null;

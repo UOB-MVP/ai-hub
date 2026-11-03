@@ -1,8 +1,8 @@
-import { Sparkles, Landmark, Shield, Headset, Code2, BarChart3, FileText, Mic, Search, Box, type LucideIcon } from 'lucide-react';
+import { Sparkles, Landmark, Shield, Headset, Code2, BarChart3, FileText, Mic, Search, Box, Users, Building2, HandCoins, MessageSquareText, Newspaper, Presentation, type LucideIcon } from 'lucide-react';
 
 const ICONS: Record<string, LucideIcon> = {
   sparkles: Sparkles, landmark: Landmark, shield: Shield, headset: Headset, code: Code2,
-  chart: BarChart3, file: FileText, mic: Mic, search: Search,
+  chart: BarChart3, users: Users, branch: Building2, recovery: HandCoins, prompt: MessageSquareText, news: Newspaper, showcase: Presentation, file: FileText, mic: Mic, search: Search,
 };
 
 export function AppIcon({ name, hue, size = 48 }: { name: string; hue: number; size?: number }) {
