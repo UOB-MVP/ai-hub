@@ -1,7 +1,8 @@
-import { ArrowUpRight, Lock, Unlock } from 'lucide-react';
+import { ArrowUpRight, Lock, Star, Unlock } from 'lucide-react';
 import { AppIcon } from '@/components/ui/AppIcon';
 import { Badge, Button } from '@/components/ui';
 import type { AiApp } from '@/core/types';
+import { useAppAccess } from '@/core/useAppAccess';
 import './apps.css';
 
 export const statusTone = (s: AiApp['status']) => (s === 'Live' ? 'green' : s === 'Beta' ? 'amber' : 'grey');
@@ -15,8 +16,18 @@ interface Props {
 }
 
 export function AppCard({ app, onOpen, action, hasAccess = true }: Props) {
+  const { favourites, toggleFavourite } = useAppAccess();
+  const isFav = favourites.includes(app.id);
   return (
     <article className="card card-hover app-card">
+      <button
+        className="icon-btn app-card-fav"
+        aria-label={isFav ? `Remove ${app.name} from favourites` : `Add ${app.name} to favourites`}
+        aria-pressed={isFav}
+        onClick={(e) => { e.stopPropagation(); toggleFavourite(app.id); }}
+      >
+        <Star size={16} fill={isFav ? 'currentColor' : 'none'} />
+      </button>
       <button className="app-card-main" onClick={() => onOpen(app)} aria-label={`Open ${app.name} details`}>
         <div className="row app-card-top">
           <AppIcon name={app.icon} hue={app.hue} />
@@ -31,6 +42,7 @@ export function AppCard({ app, onOpen, action, hasAccess = true }: Props) {
       </button>
       <div className="app-card-foot">
         <span className="stat">{app.access === 'All staff' ? <><Unlock size={14} />All staff</> : <><Lock size={14} />Request access</>}</span>
+        {app.ratingCount > 0 && <span className="stat"><Star size={14} fill="currentColor" />{app.rating.toFixed(1)} ({app.ratingCount})</span>}
         <span className="grow" />
         {action ? (
           <Button size="sm" variant={hasAccess ? action.variant ?? 'primary' : 'ghost'} onClick={() => action.onClick(app)}>

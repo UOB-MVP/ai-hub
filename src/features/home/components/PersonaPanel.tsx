@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { ClipboardCheck, PackagePlus, ShieldCheck, Sparkles } from 'lucide-react';
 import { usePersona } from '@/core/PersonaContext';
 import { useContent } from '@/core/ContentContext';
-import { APPS } from '@/data/apps';
+import { usePlatform } from '@/core/PlatformContext';
 import type { PersonaId } from '@/core/types';
 import './home.css';
 
@@ -10,8 +10,9 @@ import './home.css';
 export function PersonaPanel() {
   const { persona, user } = usePersona();
   const { items } = useContent();
+  const { apps } = usePlatform();
   const pending = items.filter((i) => i.status === 'draft' && i.authorId !== user.id).length;
-  const myApps = APPS.filter((a) => a.ownerId === user.id).length;
+  const myApps = apps.filter((a) => a.ownerId === user.id).length;
 
   const panels: Record<PersonaId, { icon: typeof Sparkles; title: string; body: string; cta: string; to: string; stat?: string } | null> = {
     consumer: { icon: Sparkles, title: 'Get more from AI', body: 'New here? Start with “Your first 30 minutes with UOB Assist”.', cta: 'Start learning', to: '/learn' },

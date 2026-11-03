@@ -3,15 +3,16 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 import { SectionHeader } from '@/components/ui';
 import { AppIcon } from '@/components/ui/AppIcon';
 import { AppDetailModal } from '@/components/apps/AppDetailModal';
-import { APPS } from '@/data/apps';
+import { usePlatform } from '@/core/PlatformContext';
 import { useAppAccess } from '@/core/useAppAccess';
 import type { AiApp } from '@/core/types';
 import './home.css';
 
 export function FeaturedApps() {
+  const { publishedApps } = usePlatform();
   const { hasAccess, isRequested, requestAccess, launch } = useAppAccess();
   const [sel, setSel] = useState<AiApp | null>(null);
-  const [lead, ...rest] = APPS.filter((a) => a.featured);
+  const [lead, ...rest] = publishedApps.filter((a) => a.featured).sort((a, b) => (a.featuredPriority ?? 99) - (b.featuredPriority ?? 99));
   if (!lead) return null;
   return (
     <section>

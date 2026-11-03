@@ -4,15 +4,17 @@ import { Badge, Button, EmptyState, Modal, PageHero, SectionHeader } from '@/com
 import { AppIcon } from '@/components/ui/AppIcon';
 import { statusTone } from '@/components/apps/AppCard';
 import { usePersona } from '@/core/PersonaContext';
-import { APPS, APP_CATEGORIES } from '@/data/apps';
+import { usePlatform } from '@/core/PlatformContext';
+import { APP_CATEGORIES } from '@/data/apps';
 
 /** Owner view: apps owned by the signed-in user. */
 export function MyAppsPage() {
   const { user } = usePersona();
+  const { apps } = usePlatform();
   const [open, setOpen] = useState(false);
   const [submitted, setSubmitted] = useState<string[]>([]);
   const [name, setName] = useState('');
-  const mine = APPS.filter((a) => a.ownerId === user.id);
+  const mine = apps.filter((a) => a.ownerId === user.id);
 
   return (
     <>

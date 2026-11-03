@@ -1,5 +1,7 @@
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { AiApp } from './types';
+import { usePlatform } from './PlatformContext';
 
 interface AccessState {
   hasAccess: (a: AiApp) => boolean;
@@ -9,29 +11,40 @@ interface AccessState {
   toggleFavourite: (id: string) => void;
   launch: (a: AiApp) => void;
   recent: string[];
+  upvoted: string[];
+  toggleUpvote: (a: AiApp) => void;
 }
 
 const Ctx = createContext<AccessState | null>(null);
 
-/** Entitlements, favourites and recents. Replace with API-backed state later. */
+/** Personal favourites, recents and launch behaviour. Entitlement logic lives in PlatformContext. */
 export function AppAccessProvider({ children }: { children: ReactNode }) {
-  const [requested, setRequested] = useState<string[]>([]);
-  const [favourites, setFav] = useState<string[]>(['uob-assist', 'code-pilot']);
-  const [recent, setRecent] = useState<string[]>(['uob-assist', 'insight-studio', 'reg-radar']);
+  const platform = usePlatform();
+  const navigate = useNavigate();
+  const [favourites, setFav] = useState<string[]>(['rcp-bot', 'hr-bot']);
+  const [recent, setRecent] = useState<string[]>(['rcp-bot', 'doc-intel']);
+  const [upvoted, setUpvoted] = useState<string[]>([]);
 
-  const hasAccess = useCallback((a: AiApp) => a.access === 'All staff', []);
   const value = useMemo<AccessState>(() => ({
-    hasAccess,
-    isRequested: (a) => requested.includes(a.id),
-    requestAccess: (a) => setRequested((r) => [...new Set([...r, a.id])]),
+    hasAccess: platform.hasAccess,
+    isRequested: platform.isRequested,
+    requestAccess: (a) => platform.submitAccessRequest(a.id),
     favourites,
     toggleFavourite: (id) => setFav((f) => (f.includes(id) ? f.filter((x) => x !== id) : [...f, id])),
     launch: (a) => {
       setRecent((r) => [a.id, ...r.filter((x) => x !== a.id)].slice(0, 6));
-      if (a.url && a.url !== '#') window.open(a.url, '_blank', 'noopener');
+      // AI Hub-hosted apps stay in the same tab with back navigation; externally hosted apps open in a new tab.
+      if (a.hosting === 'external') window.open(`/external/${a.id}`, '_blank', 'noopener');
+      else navigate(`/apps/${a.id}`);
     },
     recent,
-  }), [requested, favourites, recent, hasAccess]);
+    upvoted,
+    toggleUpvote: (a) => {
+      const already = upvoted.includes(a.id);
+      setUpvoted((u) => (already ? u.filter((x) => x !== a.id) : [...u, a.id]));
+      platform.updateApp(a.id, { upvotes: Math.max(0, a.upvotes + (already ? -1 : 1)) });
+    },
+  }), [platform, favourites, recent, upvoted, navigate]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

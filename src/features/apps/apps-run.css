@@ -1,0 +1,6 @@
+.app-run { max-width: 760px; margin: 0 auto; padding: 24px 0; }
+.app-run-standalone { padding-top: 32px; }
+.app-run-back { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: var(--uob-blue-700); margin-bottom: 16px; }
+.app-run-ext-bar { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 16px; }
+.app-run-surface { padding: 24px; }
+.app-run-note { color: var(--text-2); margin: 16px 0; }

@@ -4,17 +4,18 @@ import { Star } from 'lucide-react';
 import { PageHero, SectionHeader, Tabs } from '@/components/ui';
 import { AppCatalogue } from '@/components/apps/AppCatalogue';
 import { AppIcon } from '@/components/ui/AppIcon';
-import { APPS } from '@/data/apps';
+import { usePlatform } from '@/core/PlatformContext';
 import { useAppAccess } from '@/core/useAppAccess';
 
 type Tab = 'all' | 'mine' | 'request';
 
 export function UsePage() {
+  const { publishedApps: APPS } = usePlatform();
   const { hasAccess, favourites, toggleFavourite, recent, launch } = useAppAccess();
   const [tab, setTab] = useState<Tab>('all');
-  const accessible = useMemo(() => APPS.filter(hasAccess), [hasAccess]);
-  const restricted = useMemo(() => APPS.filter((a) => !hasAccess(a)), [hasAccess]);
-  const quick = useMemo(() => [...favourites, ...recent.filter((r) => !favourites.includes(r))].map((id) => APPS.find((a) => a.id === id)).filter((a): a is typeof APPS[number] => !!a && hasAccess(a)).slice(0, 6), [favourites, recent, hasAccess]);
+  const accessible = useMemo(() => APPS.filter(hasAccess), [APPS, hasAccess]);
+  const restricted = useMemo(() => APPS.filter((a) => !hasAccess(a)), [APPS, hasAccess]);
+  const quick = useMemo(() => [...favourites, ...recent.filter((r) => !favourites.includes(r))].map((id) => APPS.find((a) => a.id === id)).filter((a): a is typeof APPS[number] => !!a && hasAccess(a)).slice(0, 6), [APPS, favourites, recent, hasAccess]);
   const list = tab === 'all' ? APPS : tab === 'mine' ? accessible : restricted;
 
   return (

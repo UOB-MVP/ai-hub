@@ -1,10 +1,11 @@
 import { Badge, PageHero, SectionHeader } from '@/components/ui';
 import { useContent } from '@/core/ContentContext';
+import { usePlatform } from '@/core/PlatformContext';
 import { PERSONAS } from '@/core/personas';
-import { APPS } from '@/data/apps';
 
 export function AdminPage() {
   const { items } = useContent();
+  const { apps: APPS } = usePlatform();
   const pending = items.filter((i) => i.status === 'draft').length;
   return (
     <>
