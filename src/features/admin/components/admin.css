@@ -1,0 +1,5 @@
+.admin-kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+.admin-kpi { padding: 16px 18px; display: flex; flex-direction: column; gap: 4px; }
+.admin-kpi-value { font-size: 28px; font-weight: 800; letter-spacing: -.02em; color: var(--uob-blue-800); }
+.admin-kpi-label { font-size: 13px; color: var(--text-2); }
+.admin-kpi-breakdown { display: flex; gap: 10px; margin-top: 4px; font-size: 12px; flex-wrap: wrap; }

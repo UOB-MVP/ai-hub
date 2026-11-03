@@ -11,6 +11,7 @@ import { MyAppsPage } from '@/features/manage/MyAppsPage';
 import { AdminPage } from '@/features/admin/AdminPage';
 import { AppRunPage } from '@/features/apps/AppRunPage';
 import { ExternalAppPage } from '@/features/apps/ExternalAppPage';
+import { MyUsagePage } from '@/features/my-usage/MyUsagePage';
 
 /** AppAccessProvider needs router hooks, so it must be mounted inside the route tree. */
 function AppAccessGate() {
@@ -40,6 +41,7 @@ export const router = createBrowserRouter([
               { path: 'use', element: <UsePage /> },
               { path: 'apps/:id', element: <AppRunPage /> },
               { path: 'learn', element: <LearnPage /> },
+              { path: 'my-usage', element: <MyUsagePage /> },
               { element: <RequireAuth allow={(p) => p.can.manageOwnApps} />, children: [{ path: 'my-apps', element: <MyAppsPage /> }] },
               { element: <RequireAuth allow={(p) => p.can.administerPlatform} />, children: [{ path: 'admin', element: <AdminPage /> }] },
             ],

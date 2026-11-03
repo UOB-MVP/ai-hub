@@ -1,4 +1,4 @@
-import { ClipboardCheck, Compass, GraduationCap, PackagePlus, Rocket, ShieldCheck, type LucideIcon } from 'lucide-react';
+import { BarChart3, ClipboardCheck, Compass, GraduationCap, PackagePlus, Rocket, ShieldCheck, type LucideIcon } from 'lucide-react';
 import type { Persona } from '@/core/types';
 
 export interface NavItem { to: string; label: string; icon: LucideIcon; visible?: (p: Persona) => boolean }
@@ -8,6 +8,7 @@ export const NAV: NavItem[] = [
   { to: '/discover', label: 'Discover', icon: Compass },
   { to: '/use', label: 'Use', icon: Rocket },
   { to: '/learn', label: 'Learn', icon: GraduationCap },
+  { to: '/my-usage', label: 'My Usage', icon: BarChart3 },
   { to: '/my-apps', label: 'My Apps', icon: PackagePlus, visible: (p) => p.can.manageOwnApps },
   { to: '/learn?view=review', label: 'Review queue', icon: ClipboardCheck, visible: (p) => p.can.moderateLearning },
   { to: '/admin', label: 'Admin', icon: ShieldCheck, visible: (p) => p.can.administerPlatform },

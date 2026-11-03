@@ -22,6 +22,7 @@ interface PlatformState {
   submitApp: (input: { name: string; category: AppCategory; description: string; hosting: AppHosting; raiEvidence?: string; ownerId?: string }) => void;
   assignOwner: (id: string, ownerId: string) => void;
   toggleFeatured: (id: string) => void;
+  toggleAppBlocked: (id: string) => void;
 
   requests: AccessRequest[];
   requestsForApp: (appId: string) => AccessRequest[];
@@ -111,6 +112,20 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
     setApps((prev) => prev.map((a) => (a.id === id ? { ...a, featured: !a.featured, featuredPriority: !a.featured ? (Math.max(0, ...prev.map((x) => x.featuredPriority ?? 0)) + 1) : undefined } : a)));
   }, []);
 
+  const toggleAppBlocked = useCallback((id: string) => {
+    setApps((prev) => prev.map((a) => (a.id === id ? { ...a, blocked: !a.blocked } : a)));
+    const app = apps.find((a) => a.id === id);
+    if (app) {
+      notify({
+        kind: 'health',
+        title: app.blocked ? `${app.name} unblocked` : `${app.name} blocked`,
+        body: app.blocked ? `${app.name} is available again on AI Hub.` : `${app.name} has been blocked from launch and catalogue visibility by a Platform Admin.`,
+        link: '/my-apps',
+        userId: app.ownerId,
+      });
+    }
+  }, [apps, notify]);
+
   const requestsForApp = useCallback((appId: string) => requests.filter((r) => r.appId === appId), [requests]);
   const requestsForUser = useCallback((userId: string) => requests.filter((r) => r.userId === userId), [requests]);
 
@@ -137,7 +152,7 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
   }, [requests, getApp, notify]);
 
   const hasAccess = useCallback((app: AiApp, userId: string = CURRENT_USER.id) => (
-    app.access === 'All staff' || app.ownerId === userId || requests.some((r) => r.appId === app.id && r.userId === userId && r.status === 'approved')
+    !app.blocked && (app.access === 'All staff' || app.ownerId === userId || requests.some((r) => r.appId === app.id && r.userId === userId && r.status === 'approved'))
   ), [requests]);
 
   const isRequested = useCallback((app: AiApp, userId: string = CURRENT_USER.id) => (
@@ -163,15 +178,15 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
   const usageForApp = useCallback((appId: string) => SEED_USAGE.filter((u) => u.appId === appId), []);
   const usageForUser = useCallback((userId: string) => SEED_USAGE.filter((u) => u.userId === userId), []);
 
-  const publishedApps = useMemo(() => apps.filter((a) => a.lifecycle === 'published'), [apps]);
+  const publishedApps = useMemo(() => apps.filter((a) => a.lifecycle === 'published' && !a.blocked), [apps]);
 
   const value = useMemo<PlatformState>(() => ({
-    apps, publishedApps, getApp, updateApp, setLifecycle, publishApp, retireApp, createPlaceholder, submitApp, assignOwner, toggleFeatured,
+    apps, publishedApps, getApp, updateApp, setLifecycle, publishApp, retireApp, createPlaceholder, submitApp, assignOwner, toggleFeatured, toggleAppBlocked,
     requests, requestsForApp, requestsForUser, submitAccessRequest, resolveRequest, hasAccess, isRequested,
     feedback, feedbackForApp, addFeedback,
     users, setUserStatus,
     usageForApp, usageForUser,
-  }), [apps, publishedApps, getApp, updateApp, setLifecycle, publishApp, retireApp, createPlaceholder, submitApp, assignOwner, toggleFeatured,
+  }), [apps, publishedApps, getApp, updateApp, setLifecycle, publishApp, retireApp, createPlaceholder, submitApp, assignOwner, toggleFeatured, toggleAppBlocked,
     requests, requestsForApp, requestsForUser, submitAccessRequest, resolveRequest, hasAccess, isRequested,
     feedback, feedbackForApp, addFeedback, users, setUserStatus, usageForApp, usageForUser]);
 

@@ -1,4 +1,5 @@
 import { HomeHero } from './components/HomeHero';
+import { AnnouncementBanner } from './components/AnnouncementBanner';
 import { PersonaPanel } from './components/PersonaPanel';
 import { ThemeCards } from './components/ThemeCards';
 import { FeaturedApps } from './components/FeaturedApps';
@@ -9,6 +10,7 @@ export function HomePage() {
   return (
     <>
       <HomeHero />
+      <AnnouncementBanner />
       <PersonaPanel />
       <ThemeCards />
       <FeaturedApps />

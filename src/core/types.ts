@@ -81,6 +81,8 @@ export interface AiApp {
   requestLimitPerUser?: number;
   /** Reference to evidence captured for applicable Responsible AI guardrails, recorded at onboarding. */
   raiEvidence?: string;
+  /** Emergency kill-switch a Platform Admin can flip independent of lifecycle, e.g. to mitigate risk. */
+  blocked?: boolean;
 }
 
 export interface AppFeedback {
