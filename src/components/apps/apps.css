@@ -7,7 +7,8 @@
 .app-owner { font-size: 12px; color: var(--text-3); }
 .app-tagline { color: var(--text-2); font-size: 14px; }
 .tags { gap: 6px; }
-.app-card-foot { display: flex; align-items: center; gap: 14px; padding: 12px 20px; border-top: 1px solid var(--border); background: var(--surface-2); }
+.app-card-foot { display: flex; align-items: center; flex-wrap: wrap; row-gap: 8px; gap: 10px 14px; padding: 12px 20px; border-top: 1px solid var(--border); background: var(--surface-2); }
+.app-card-foot > .btn { margin-left: auto; }
 .stat { white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; font-size: 13px; color: var(--text-2); font-weight: 500; }
 .cap-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 14px; }
 .cap-list li { display: flex; gap: 8px; align-items: center; }
