@@ -1,11 +1,10 @@
-import { ClipboardCheck, Compass, GraduationCap, LayoutDashboard, PackagePlus, Rocket, ShieldCheck, type LucideIcon } from 'lucide-react';
+import { ClipboardCheck, Compass, GraduationCap, PackagePlus, Rocket, ShieldCheck, type LucideIcon } from 'lucide-react';
 import type { Persona } from '@/core/types';
 
 export interface NavItem { to: string; label: string; icon: LucideIcon; visible?: (p: Persona) => boolean }
 
-/** Single source for navigation. `visible` hides items per persona capability. */
+/** Single source for navigation. The "AI Hub" brand mark in the header already links home, so no separate Home item. `visible` hides items per persona capability. */
 export const NAV: NavItem[] = [
-  { to: '/home', label: 'Home', icon: LayoutDashboard },
   { to: '/discover', label: 'Discover', icon: Compass },
   { to: '/use', label: 'Use', icon: Rocket },
   { to: '/learn', label: 'Learn', icon: GraduationCap },
