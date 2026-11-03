@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CheckCircle2, ChevronDown, ChevronUp, Clock, ExternalLink, Globe, Lock, Mail, Monitor, Star, ThumbsUp, Unlock, Users } from 'lucide-react';
+import { CheckCircle2, ChevronDown, ChevronUp, Clock, ExternalLink, Globe, Lock, Mail, Monitor, ShieldCheck, Star, ThumbsUp, Unlock, Users } from 'lucide-react';
 import { Avatar, Badge, Button, Modal } from '@/components/ui';
 import { AppIcon } from '@/components/ui/AppIcon';
 import type { AiApp } from '@/core/types';
@@ -53,6 +53,9 @@ export function AppDetailModal({ app, hasAccess, requested, onClose, onLaunch, o
               <Badge tone={statusTone(app.status)}>{app.status}</Badge><Badge>{app.category}</Badge>
               <Badge tone={hasAccess ? 'green' : 'amber'}>{hasAccess ? <><Unlock size={12} />You have access</> : <><Lock size={12} />{app.access}</>}</Badge>
               <Badge tone="grey">{app.hosting === 'internal' ? <><Monitor size={12} />AI Hub-hosted</> : <><Globe size={12} />Externally hosted</>}</Badge>
+              {app.raiStatus !== 'not_required' && (
+                <Badge tone={app.raiStatus === 'approved' ? 'green' : 'amber'}><ShieldCheck size={12} />RAI {app.raiStatus === 'approved' ? 'approved' : 'pending'}</Badge>
+              )}
             </div>
             <p style={{ marginTop: 8, fontWeight: 600 }}>{app.tagline}</p>
           </div>

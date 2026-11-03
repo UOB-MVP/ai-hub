@@ -157,6 +157,8 @@ export interface LearningComment {
   userId: string;
   body: string;
   createdAt: string;
+  /** Optional 1-5 star rating submitted alongside the comment. */
+  rating?: number;
 }
 
 export interface LearningContent {

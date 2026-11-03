@@ -25,7 +25,7 @@ export function ContributeModal({ onClose, onDone }: { onClose: () => void; onDo
       onClose={onClose}
       footer={<><Button variant="ghost" onClick={onClose}>Cancel</Button><Button disabled={!valid} onClick={submit}>Submit for review</Button></>}
     >
-      <p className="muted" style={{ marginBottom: 16, fontSize: 14 }}>Share what works. A Learning Moderator reviews every submission before it is published. Do not include customer data or confidential information.</p>
+      <p className="muted" style={{ marginBottom: 16, fontSize: 14 }}>Share what works. A Learning Moderator reviews every submission before it is published. Submissions are automatically screened for sensitive data; do not include customer data or confidential information.</p>
       <div className="field"><label htmlFor="c-type">Content type</label>
         <select id="c-type" value={type} onChange={(e) => setType(e.target.value as ContentType)}>
           {CONTENT_TYPES.map((t) => <option key={t.id} value={t.id}>{t.label} – {t.blurb}</option>)}
