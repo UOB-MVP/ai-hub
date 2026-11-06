@@ -141,7 +141,8 @@ export interface UsageEntry {
 
 /* ---------- Learning ---------- */
 export type ContentType = 'tip' | 'prompt' | 'news' | 'showcase';
-export type ContentStatus = 'draft' | 'published' | 'rejected';
+/** draft = saved by the author only · submitted = awaiting moderator · published = approved · rejected = returned with feedback. */
+export type ContentStatus = 'draft' | 'submitted' | 'published' | 'rejected';
 export type LearnCategory =
   | 'Getting started'
   | 'Prompt craft'

@@ -16,9 +16,9 @@ export function HomeFeaturedLearning() {
   return (
     <section>
       <SectionHeader title="Featured learning" subtitle="Curated by our Learning Moderators this week"
-        action={<Link to="/learn" className="theme-cta">All learning <ArrowRight size={14} /></Link>} />
+        action={<Link to="/learning/all" className="theme-cta">All learning <ArrowRight size={14} /></Link>} />
       <div className="fl-grid">
-        <Link to="/learn" className="fl-lead" style={{ ['--h' as string]: L.hue }}>
+        <Link to="/learning/all" className="fl-lead" style={{ ['--h' as string]: L.hue }}>
           <span className="fa-eyebrow"><Sparkles size={14} />Featured · {L.label}</span>
           <h3>{lead.title}</h3>
           <p>{lead.summary}</p>
@@ -32,7 +32,7 @@ export function HomeFeaturedLearning() {
         {rest.map((i) => {
           const m = TYPE_META[i.type];
           return (
-            <Link key={i.id} to="/learn" className="card card-hover fl-mini">
+            <Link key={i.id} to="/learning/all" className="card card-hover fl-mini">
               <span className="fl-ico" style={{ background: `hsl(${m.hue} 85% 93%)`, color: `hsl(${m.hue} 70% 30%)` }}><m.icon size={18} /></span>
               <span className="fl-type" style={{ color: `hsl(${m.hue} 70% 30%)` }}>{m.label}</span>
               <h4>{i.title}</h4>

@@ -68,7 +68,7 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
   const retireApp = useCallback((id: string, note: string) => {
     setApps((prev) => prev.map((a) => (a.id === id ? { ...a, lifecycle: 'retired' } : a)));
     const app = apps.find((a) => a.id === id);
-    if (app) notify({ kind: 'health', title: `${app.name} retired`, body: note || `${app.name} has been retired from AI Hub.`, link: '/discover', userId: app.ownerId });
+    if (app) notify({ kind: 'health', title: `${app.name} retired`, body: note || `${app.name} has been retired from AI Hub.`, link: '/apps', userId: app.ownerId });
   }, [apps, notify]);
 
   const createPlaceholder = useCallback((name: string, category: AppCategory) => {
@@ -105,7 +105,7 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
 
   const assignOwner = useCallback((id: string, ownerId: string) => {
     updateApp(id, { ownerId });
-    notify({ kind: 'access', title: 'You were assigned as app owner', body: `You now own ${getApp(id)?.name ?? 'an app'} on AI Hub.`, link: '/my-apps', userId: ownerId });
+    notify({ kind: 'access', title: 'You were assigned as app owner', body: `You now own ${getApp(id)?.name ?? 'an app'} on AI Hub.`, link: '/console', userId: ownerId });
   }, [updateApp, notify, getApp]);
 
   const toggleFeatured = useCallback((id: string) => {
@@ -120,7 +120,7 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
         kind: 'health',
         title: app.blocked ? `${app.name} unblocked` : `${app.name} blocked`,
         body: app.blocked ? `${app.name} is available again on AI Hub.` : `${app.name} has been blocked from launch and catalogue visibility by a Platform Admin.`,
-        link: '/my-apps',
+        link: '/console',
         userId: app.ownerId,
       });
     }
@@ -145,7 +145,7 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
         kind: 'access',
         title: status === 'approved' ? `Access approved: ${app?.name ?? req.appId}` : `Access request declined: ${app?.name ?? req.appId}`,
         body: status === 'approved' ? 'You can now launch this app from Use.' : (reason || 'Contact the app owner for details.'),
-        link: '/use',
+        link: '/apps?tab=mine',
         userId: req.userId,
       });
     }

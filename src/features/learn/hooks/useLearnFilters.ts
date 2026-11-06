@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import type { ContentType, LearnCategory } from '@/core/types';
 
-export type LearnView = 'all' | ContentType | 'mine' | 'review';
+export type LearnType = 'all' | ContentType;
 
-/** Single source of truth for everything filterable on the Learn page (feed + leaderboard share it). */
+/** Filter state for the "All" feed (type chips, search, and the leaderboard's category/author filters). */
 export function useLearnFilters() {
-  const [view, setView] = useState<LearnView>('all');
+  const [type, setType] = useState<LearnType>('all');
   const [category, setCategory] = useState<LearnCategory | null>(null);
   const [authorId, setAuthorId] = useState<string | null>(null);
   const [query, setQuery] = useState('');
@@ -14,6 +14,5 @@ export function useLearnFilters() {
   const toggleAuthor = (id: string) => setAuthorId((cur) => (cur === id ? null : id));
   const clear = () => { setCategory(null); setAuthorId(null); setQuery(''); };
 
-  return { view, setView, category, setCategory, toggleCategory, authorId, toggleAuthor, setAuthorId, query, setQuery, clear };
+  return { type, setType, category, setCategory, toggleCategory, authorId, toggleAuthor, setAuthorId, query, setQuery, clear };
 }
-export type LearnFilters = ReturnType<typeof useLearnFilters>;

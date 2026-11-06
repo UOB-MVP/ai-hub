@@ -24,7 +24,10 @@ function screenContent(c: NewContent): { flagged: boolean; flagReason?: string }
 
 interface ContentState {
   items: LearningContent[];
-  contribute: (c: NewContent, asDraft?: boolean) => void;
+  /** Create or update the author's own content. `submit` sends it for moderator approval; otherwise it is kept as a draft. Returns the item id. */
+  save: (c: NewContent, opts?: { id?: string; submit?: boolean }) => string;
+  submitDraft: (id: string) => void;
+  remove: (id: string) => void;
   toggleLike: (id: string) => void;
   approve: (id: string) => void;
   reject: (id: string, reason: string) => void;
@@ -39,21 +42,25 @@ export function ContentProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<LearningContent[]>(SEED_CONTENT);
   const [comments, setComments] = useState<LearningComment[]>(SEED_COMMENTS);
 
-  const contribute = useCallback((c: NewContent) => {
-    const screened = screenContent(c);
-    setItems((prev) => [
-      {
-        ...c,
-        id: `c-${Date.now()}`,
-        authorId: CURRENT_USER.id,
-        status: 'draft', // every contribution is reviewed by a Learning Moderator
-        likes: 0,
-        createdAt: new Date().toISOString().slice(0, 10),
-        readMins: Math.max(1, Math.round(((c.body ?? c.summary).length) / 600)),
-        ...screened,
-      },
-      ...prev,
-    ]);
+  const save = useCallback((c: NewContent, opts: { id?: string; submit?: boolean } = {}) => {
+    const id = opts.id ?? `c-${Date.now()}`;
+    const status = opts.submit ? 'submitted' : 'draft';
+    const screened = opts.submit ? screenContent(c) : { flagged: false, flagReason: undefined };
+    const readMins = Math.max(1, Math.round(((c.body ?? c.summary).length) / 600));
+    setItems((prev) => {
+      const patch = { ...c, status: status as LearningContent['status'], readMins, rejectionReason: undefined, ...screened };
+      if (prev.some((i) => i.id === id)) return prev.map((i) => (i.id === id ? { ...i, ...patch } : i));
+      return [{ id, authorId: CURRENT_USER.id, likes: 0, createdAt: new Date().toISOString().slice(0, 10), ...patch }, ...prev];
+    });
+    return id;
+  }, []);
+
+  const submitDraft = useCallback((id: string) => {
+    setItems((prev) => prev.map((i) => (i.id === id ? { ...i, status: 'submitted', rejectionReason: undefined, ...screenContent({ ...i, tags: i.tags }) } : i)));
+  }, []);
+
+  const remove = useCallback((id: string) => {
+    setItems((prev) => prev.filter((i) => !(i.id === id && i.authorId === CURRENT_USER.id && i.status === 'draft')));
   }, []);
 
   const toggleLike = useCallback((id: string) => {
@@ -76,7 +83,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     setComments((prev) => [...prev, { id: `lc-${Date.now()}`, contentId, userId: CURRENT_USER.id, body, rating, createdAt: new Date().toISOString().slice(0, 10) }]);
   }, []);
 
-  const value = useMemo(() => ({ items, contribute, toggleLike, approve, reject, commentsFor, addComment }), [items, contribute, toggleLike, approve, reject, commentsFor, addComment]);
+  const value = useMemo(() => ({ items, save, submitDraft, remove, toggleLike, approve, reject, commentsFor, addComment }), [items, save, submitDraft, remove, toggleLike, approve, reject, commentsFor, addComment]);
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 

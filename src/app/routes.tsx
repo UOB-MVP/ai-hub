@@ -4,14 +4,19 @@ import { RequireAuth } from './RequireAuth';
 import { AppAccessProvider } from '@/core/useAppAccess';
 import { LoginPage } from '@/features/login/LoginPage';
 import { HomePage } from '@/features/home/HomePage';
-import { DiscoverPage } from '@/features/discover/DiscoverPage';
-import { UsePage } from '@/features/use/UsePage';
-import { LearnPage } from '@/features/learn/LearnPage';
-import { MyAppsPage } from '@/features/manage/MyAppsPage';
+import { LearningLayout } from '@/features/learn/LearningLayout';
+import { AllPage } from '@/features/learn/pages/AllPage';
+import { DraftPage } from '@/features/learn/pages/DraftPage';
+import { SubmissionPage } from '@/features/learn/pages/SubmissionPage';
+import { ContributePage } from '@/features/learn/pages/ContributePage';
+import { AppsPage } from '@/features/apps/AppsPage';
+import { ConsoleRedirect } from '@/features/console/ConsolePage';
+import { ModerationDesk } from '@/features/console/ModerationDesk';
 import { AdminPage } from '@/features/admin/AdminPage';
+import { MyUsagePage } from '@/features/my-usage/MyUsagePage';
+import { MyAppsPage } from '@/features/manage/MyAppsPage';
 import { AppRunPage } from '@/features/apps/AppRunPage';
 import { ExternalAppPage } from '@/features/apps/ExternalAppPage';
-import { MyUsagePage } from '@/features/my-usage/MyUsagePage';
 import { AskPage } from '@/features/ask/AskPage';
 
 /** AppAccessProvider needs router hooks, so it must be mounted inside the route tree. */
@@ -38,14 +43,31 @@ export const router = createBrowserRouter([
             children: [
               { index: true, element: <Navigate to="/home" replace /> },
               { path: 'home', element: <HomePage /> },
-              { path: 'discover', element: <DiscoverPage /> },
-              { path: 'use', element: <UsePage /> },
+              { path: 'apps', element: <AppsPage /> },
+              { path: 'console', element: <ConsoleRedirect /> },
+              { path: 'workspace', element: <MyUsagePage /> },
+              { element: <RequireAuth allow={(p) => p.can.moderateLearning} />, children: [{ path: 'moderation', element: <ModerationDesk /> }] },
+              { element: <RequireAuth allow={(p) => p.can.administerPlatform} />, children: [{ path: 'control-centre', element: <AdminPage /> }] },
+              { path: 'discover', element: <Navigate to="/apps" replace /> },
+              { path: 'use', element: <Navigate to="/apps?tab=mine" replace /> },
+              { path: 'my-usage', element: <Navigate to="/workspace" replace /> },
               { path: 'apps/:id', element: <AppRunPage /> },
-              { path: 'learn', element: <LearnPage /> },
+              {
+                path: 'learning',
+                element: <LearningLayout />,
+                children: [
+                  { index: true, element: <Navigate to="all" replace /> },
+                  { path: 'all', element: <AllPage /> },
+                  { path: 'draft', element: <DraftPage /> },
+                  { path: 'submission', element: <SubmissionPage /> },
+                  { path: 'contribute', element: <ContributePage /> },
+                  { path: 'contribute/:id', element: <ContributePage /> },
+                ],
+              },
+              { path: 'learn', element: <Navigate to="/learning/all" replace /> },
               { path: 'ask', element: <AskPage /> },
-              { path: 'my-usage', element: <MyUsagePage /> },
               { element: <RequireAuth allow={(p) => p.can.manageOwnApps} />, children: [{ path: 'my-apps', element: <MyAppsPage /> }] },
-              { element: <RequireAuth allow={(p) => p.can.administerPlatform} />, children: [{ path: 'admin', element: <AdminPage /> }] },
+              { element: <RequireAuth allow={(p) => p.can.administerPlatform} />, children: [{ path: 'admin', element: <Navigate to="/control-centre" replace /> }] },
             ],
           },
         ],

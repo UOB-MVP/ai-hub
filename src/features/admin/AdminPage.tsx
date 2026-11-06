@@ -14,7 +14,7 @@ type Tab = 'apps' | 'users' | 'featured' | 'announcements' | 'monitoring';
 export function AdminPage() {
   const { items } = useContent();
   const { apps } = usePlatform();
-  const pending = items.filter((i) => i.status === 'draft').length;
+  const pending = items.filter((i) => i.status === 'submitted').length;
   const onboarding = apps.filter((a) => a.lifecycle === 'onboarding').length;
   const [tab, setTab] = useState<Tab>('apps');
 

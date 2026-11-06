@@ -15,7 +15,7 @@ export function HomeHero() {
         <p>Discover trusted AI apps, put them to work, and learn from colleagues across the bank — safely, responsibly and in one place.</p>
         <div className="row" style={{ gap: 12, flexWrap: 'wrap', marginTop: 8 }}>
           <Link to="/discover" className="btn btn-light">Explore AI apps <ArrowRight size={16} /></Link>
-          <Link to="/learn" className="btn btn-hero-ghost">Start learning</Link>
+          <Link to="/learning/all" className="btn btn-hero-ghost">Start learning</Link>
         </div>
       </div>
       <div className="hero-art" aria-hidden>

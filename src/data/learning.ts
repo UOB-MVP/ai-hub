@@ -79,6 +79,44 @@ export const SEED_CONTENT: LearningContent[] = [
     category: 'Risk & Compliance', authorId: 'u-sarah', status: 'published', likes: 7,
     createdAt: '2026-09-29', readMins: 1, tags: ['Risk', 'Contribution guide'],
   },
+  {
+    id: 'l-11', type: 'prompt', title: 'Reconcile two spreadsheets and list the mismatches',
+    summary: 'A prompt that compares two exported tables and returns only the rows that differ, with a one-line reason for each.',
+    body: 'Prompt: "Compare the two tables below by [key column]. List only rows that differ, with the field and both values."',
+    category: 'Productivity', authorId: 'u-me', status: 'draft', likes: 0,
+    createdAt: '2026-11-02', readMins: 1, tags: ['Finance', 'Reconciliation'],
+  },
+  {
+    id: 'l-12', type: 'tip', title: 'Turn meeting notes into an action tracker',
+    summary: 'Paste raw notes and ask for owner, due date and status columns, then review before sharing with the team.',
+    category: 'Getting started', authorId: 'u-me', status: 'draft', likes: 0,
+    createdAt: '2026-11-04', readMins: 1, tags: ['Meetings', 'Actions'],
+  },
+  {
+    id: 'l-13', type: 'showcase', title: 'How DocIntel sped up KYC document intake',
+    summary: 'A walkthrough of the intake flow before and after DocIntel, with the time saved per case.',
+    category: 'Industry', authorId: 'u-me', status: 'submitted', likes: 0,
+    createdAt: '2026-11-03', readMins: 3, tags: ['DocIntel', 'KYC'],
+  },
+  {
+    id: 'l-14', type: 'prompt', title: 'Explain a loan covenant in plain English',
+    summary: 'Ask for a plain-language explanation of a covenant clause for a relationship manager briefing.',
+    category: 'Prompt craft', authorId: 'u-me', status: 'rejected', likes: 0,
+    createdAt: '2026-10-29', readMins: 1, tags: ['Credit', 'Covenants'],
+    rejectionReason: 'Please add a worked example and remove the reference to a named client before resubmitting.',
+  },
+  {
+    id: 'l-15', type: 'tip', title: 'Use "act as a reviewer" to pressure-test a memo',
+    summary: 'Ask the assistant to challenge the assumptions in your draft memo before it goes to your manager.',
+    category: 'Prompt craft', authorId: 'u-grace', status: 'submitted', likes: 0,
+    createdAt: '2026-11-04', readMins: 1, tags: ['Review', 'Writing'],
+  },
+  {
+    id: 'l-16', type: 'news', title: 'New guidance on generative AI for client communications',
+    summary: 'Group Compliance has published updated guidance on using AI to draft client-facing communications.',
+    category: 'Risk & Compliance', authorId: 'u-ben', status: 'submitted', likes: 0,
+    createdAt: '2026-11-05', readMins: 2, tags: ['Compliance', 'Guidance'],
+  },
 ];
 
 /** The learning areas shown in Discover and on Home. */

@@ -10,7 +10,7 @@ export function MyLearning() {
   return (
     <section>
       <SectionHeader title="My learning" subtitle="Pick up where you left off"
-        action={<Link to="/learn" className="theme-cta">Browse Learn <ArrowRight size={14} /></Link>} />
+        action={<Link to="/learning/all" className="theme-cta">Browse Learn <ArrowRight size={14} /></Link>} />
       <div className="ml-grid">
         <div className="card ml-summary">
           <div className="ml-ring" style={{ ['--p' as string]: pct }}><span><strong>{pct}%</strong>weekly goal</span></div>
@@ -23,7 +23,7 @@ export function MyLearning() {
         </div>
         <div className="ml-list">
           {MY_LEARNING.map((m) => (
-            <Link key={m.id} to="/learn" className="card card-hover ml-item">
+            <Link key={m.id} to="/learning/all" className="card card-hover ml-item">
               <AppIcon name={m.icon} hue={m.hue} size={40} />
               <div className="grow">
                 <div className="row" style={{ gap: 8 }}>

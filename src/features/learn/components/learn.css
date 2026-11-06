@@ -51,3 +51,12 @@
 .bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--uob-blue-600), var(--uob-red)); border-radius: 99px; }
 .lb-score { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.1; }
 .lb-score strong { font-size: 18px; color: var(--uob-blue-800); } .lb-score small { color: var(--text-3); font-size: 11px; }
+
+/* ---- Learning section bar ---- */
+.learning-bar { display: flex; align-items: flex-end; gap: 16px; border-bottom: 1px solid var(--border); }
+.learning-tabs { border-bottom: 0; flex: 1; min-width: 0; margin-bottom: -1px; }
+.learning-tabs a.tab { text-decoration: none; }
+.learning-contribute { margin-bottom: 8px; flex-shrink: 0; }
+.contribute { display: flex; flex-direction: column; gap: 12px; max-width: 760px; }
+.contribute h2 { font-size: 26px; letter-spacing: -.02em; }
+.contribute-form { padding: 22px; display: flex; flex-direction: column; gap: 14px; }

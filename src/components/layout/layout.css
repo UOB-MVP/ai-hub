@@ -38,3 +38,7 @@
 .footer-inner { display: flex; flex-direction: column; gap: 12px; font-size: 13px; }
 .footer-inner .muted-light { opacity: .7; font-weight: 600; }
 .footer-inner .small { opacity: .6; font-size: 12px; }
+
+.brandmark { display: inline-flex; flex-direction: column; align-items: flex-start; gap: 3px; line-height: 1; }
+.brandmark-title { font-weight: 800; letter-spacing: -.03em; color: var(--uob-blue-800); line-height: 1; }
+.brandmark.reversed .brandmark-title { color: #fff; }

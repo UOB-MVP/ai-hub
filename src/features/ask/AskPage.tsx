@@ -66,7 +66,7 @@ export function AskPage() {
                 )}
                 <p>{m.text}</p>
                 {m.source && (
-                  <Link to="/learn" className="ask-source"><ShieldCheck size={13} />Source: {m.source.title}</Link>
+                  <Link to="/learning/all" className="ask-source"><ShieldCheck size={13} />Source: {m.source.title}</Link>
                 )}
               </div>
             </div>

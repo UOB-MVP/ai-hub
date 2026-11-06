@@ -1,16 +1,20 @@
-import { BarChart3, ClipboardCheck, Compass, GraduationCap, MessageCircleQuestion, PackagePlus, Rocket, ShieldCheck, type LucideIcon } from 'lucide-react';
+import { AppWindow, GraduationCap, Home, LayoutDashboard, type LucideIcon } from 'lucide-react';
 import type { Persona } from '@/core/types';
 
-export interface NavItem { to: string; label: string; icon: LucideIcon; visible?: (p: Persona) => boolean }
+export interface NavItem { to: string | ((p: Persona) => string); label: string | ((p: Persona) => string); icon: LucideIcon; visible?: (p: Persona) => boolean }
 
-/** Single source for navigation. The "AI Hub" brand mark in the header already links home, so no separate Home item. `visible` hides items per persona capability. */
+/** Role-aware name for the console: what each persona manages from the same entry point. */
+export const consoleLabel = (p: Persona) =>
+  p.can.administerPlatform ? 'Control Centre' : p.can.moderateLearning ? 'Moderation Desk' : 'My Workspace';
+
+/** Each role has its own console route so its code stays separate; `/console` just redirects to the right one. */
+export const consoleRoute = (p: Persona) =>
+  p.can.administerPlatform ? '/control-centre' : p.can.moderateLearning ? '/moderation' : '/workspace';
+
+/** Single source for navigation. The Console entry adapts to the signed-in role (see features/console). */
 export const NAV: NavItem[] = [
-  { to: '/discover', label: 'Discover', icon: Compass },
-  { to: '/use', label: 'Use', icon: Rocket },
-  { to: '/learn', label: 'Learn', icon: GraduationCap },
-  { to: '/ask', label: 'Ask Me Anything', icon: MessageCircleQuestion },
-  { to: '/my-usage', label: 'My Usage', icon: BarChart3 },
-  { to: '/my-apps', label: 'My Apps', icon: PackagePlus, visible: (p) => p.can.manageOwnApps },
-  { to: '/learn?view=review', label: 'Review queue', icon: ClipboardCheck, visible: (p) => p.can.moderateLearning },
-  { to: '/admin', label: 'Admin', icon: ShieldCheck, visible: (p) => p.can.administerPlatform },
+  { to: '/home', label: 'Home', icon: Home },
+  { to: '/apps', label: 'Apps', icon: AppWindow },
+  { to: '/learning', label: 'Learning', icon: GraduationCap },
+  { to: consoleRoute, label: consoleLabel, icon: LayoutDashboard },
 ];

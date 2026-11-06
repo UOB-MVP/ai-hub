@@ -13,7 +13,7 @@ export function AppRunPage() {
   const app = id ? getApp(id) : undefined;
 
   if (!app) return <EmptyState title="App not found" message="This app is no longer available on AI Hub." />;
-  if (!hasAccess(app)) return <Navigate to="/use" replace />;
+  if (!hasAccess(app)) return <Navigate to="/apps?tab=mine" replace />;
 
   return (
     <div className="app-run">

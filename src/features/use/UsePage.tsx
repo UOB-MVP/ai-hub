@@ -49,7 +49,7 @@ export function UsePage() {
           onChange={setTab}
         />
         <AppCatalogue apps={list} mode="use" />
-        <p className="muted" style={{ fontSize: 14 }}>Can’t find what you need? <Link to="/discover" style={{ color: 'var(--uob-blue-700)', fontWeight: 600 }}>Explore the full catalogue in Discover →</Link></p>
+        <p className="muted" style={{ fontSize: 14 }}>Can’t find what you need? <Link to="/apps" style={{ color: 'var(--uob-blue-700)', fontWeight: 600 }}>Explore the full catalogue in Discover →</Link></p>
       </section>
     </>
   );

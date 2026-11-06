@@ -9,11 +9,11 @@ import './home.css';
 export function PersonaPanel() {
   const { persona, user } = usePersona();
   const { items } = useContent();
-  const pending = items.filter((i) => i.status === 'draft' && i.authorId !== user.id).length;
+  const pending = items.filter((i) => i.status === 'submitted' && i.authorId !== user.id).length;
 
   const panels: Record<PersonaId, { icon: typeof Sparkles; title: string; body: string; cta: string; to: string; stat?: string } | null> = {
-    'bank-user': { icon: Sparkles, title: 'Get more from AI', body: 'New here? Start with “Your first 30 minutes with UOB Assist”.', cta: 'Start learning', to: '/learn' },
-    'learning-moderator': { icon: ClipboardCheck, title: 'Review queue', body: 'Contributions are waiting for your review.', cta: 'Review now', to: '/learn?view=review', stat: `${pending} pending` },
+    'bank-user': { icon: Sparkles, title: 'Get more from AI', body: 'New here? Start with “Your first 30 minutes with UOB Assist”.', cta: 'Start learning', to: '/learning/all' },
+    'learning-moderator': { icon: ClipboardCheck, title: 'Review queue', body: 'Contributions are waiting for your review.', cta: 'Review now', to: '/moderation', stat: `${pending} pending` },
     'platform-admin': { icon: ShieldCheck, title: 'Platform governance', body: 'Approvals, app onboarding and roles at a glance.', cta: 'Open admin view', to: '/admin', stat: `${pending} content pending` },
   };
   const p = panels[persona.id];

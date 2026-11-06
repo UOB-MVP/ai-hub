@@ -25,7 +25,7 @@ export function MyApps() {
   return (
     <section>
       <SectionHeader title="My apps" subtitle="Your favourites and recently used apps"
-        action={<Link to="/use" className="theme-cta">All my apps <ArrowRight size={14} /></Link>} />
+        action={<Link to="/apps" className="theme-cta">All my apps <ArrowRight size={14} /></Link>} />
       <div className="my-grid">
         {apps.map((a) => {
           const s = MY_APP_STATS.find((x) => x.appId === a.id);

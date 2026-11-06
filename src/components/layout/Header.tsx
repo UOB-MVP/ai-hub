@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Bell, LogOut } from 'lucide-react';
-import { Logo } from './Logo';
+import { BrandMark } from './Logo';
 import { NAV } from './nav';
 import { Avatar } from '@/components/ui';
 import { usePersona } from '@/core/PersonaContext';
@@ -61,22 +61,19 @@ function NotificationBell() {
 export function Header() {
   const { user, persona, signOut } = usePersona();
   const nav = useNavigate();
-  const { pathname, search } = useLocation();
+  const { pathname } = useLocation();
   return (
     <header className="site-header">
       <div className="container header-inner">
-        <NavLink to="/home" className="brand" aria-label="UOB AI Hub home">
-          <Logo height={34} />
-          <span className="brand-divider" />
-          <span className="brand-name">AI Hub</span>
+        <NavLink to="/home" className="brand" aria-label="AI Hub home">
+          <BrandMark />
         </NavLink>
         <nav className="main-nav" aria-label="Primary">
-          {NAV.filter((n) => !n.visible || n.visible(persona)).map(({ to, label, icon: Icon }) => {
-            const [path, q] = to.split('?');
-            // Items sharing a path (Learn vs Review queue) are told apart by their query string.
-            const active = q ? pathname === path && search.includes(q) : pathname === path && !(path === '/learn' && search.includes('view=review'));
+          {NAV.filter((n) => !n.visible || n.visible(persona)).map(({ to: rawTo, label, icon: Icon }) => {
+            const to = typeof rawTo === 'function' ? rawTo(persona) : rawTo;
+            const active = pathname === to || pathname.startsWith(`${to}/`);
             return (
-              <NavLink key={to} to={to} className={`nav-link ${active ? 'active' : ''}`}><Icon size={17} />{label}</NavLink>
+              <NavLink key={to} to={to} className={`nav-link ${active ? 'active' : ''}`}><Icon size={17} />{typeof label === 'function' ? label(persona) : label}</NavLink>
             );
           })}
         </nav>

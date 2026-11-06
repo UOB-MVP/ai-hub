@@ -38,4 +38,4 @@
   .login-brand { display: none; }
   .login-card-logo { display: block; }
 }
-.login-brand > img { align-self: flex-start; }
+.login-brand > img, .login-brand > .brandmark { align-self: flex-start; }

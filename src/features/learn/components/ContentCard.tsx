@@ -12,8 +12,8 @@ export const TYPE_META: Record<ContentType, { label: string; icon: LucideIcon; h
   news: { label: 'News', icon: Newspaper, hue: 160 },
   showcase: { label: 'Showcase', icon: Presentation, hue: 335 },
 };
-export const STATUS_TONE: Record<ContentStatus, 'grey' | 'green' | 'red'> = { draft: 'grey', published: 'green', rejected: 'red' };
-export const STATUS_LABEL: Record<ContentStatus, string> = { draft: 'Draft · in review', published: 'Published', rejected: 'Rejected' };
+export const STATUS_TONE: Record<ContentStatus, 'grey' | 'amber' | 'green' | 'red'> = { draft: 'grey', submitted: 'amber', published: 'green', rejected: 'red' };
+export const STATUS_LABEL: Record<ContentStatus, string> = { draft: 'Draft', submitted: 'Submitted · in review', published: 'Approved', rejected: 'Rejected' };
 
 export function ContentCard({ item, showStatus = false, actions }: { item: LearningContent; showStatus?: boolean; actions?: React.ReactNode }) {
   const { toggleLike, commentsFor, addComment } = useContent();
@@ -37,7 +37,7 @@ export function ContentCard({ item, showStatus = false, actions }: { item: Learn
   };
 
   const share = async () => {
-    const url = `${window.location.origin}/learn#${item.id}`;
+    const url = `${window.location.origin}/learning/all#${item.id}`;
     try { await navigator.clipboard.writeText(url); } catch { /* clipboard unavailable */ }
     setShared(true);
     setTimeout(() => setShared(false), 1500);

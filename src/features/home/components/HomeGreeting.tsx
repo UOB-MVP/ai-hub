@@ -5,8 +5,8 @@ import { GREETING_STATS as G } from '@/data/home';
 import './home.css';
 
 const CTA: Record<string, { label: string; to: string } | undefined> = {
-  'learning-moderator': { label: 'Review queue', to: '/learn?view=review' },
-  'platform-admin': { label: 'Admin view', to: '/admin' },
+  'learning-moderator': { label: 'Review queue', to: '/moderation' },
+  'platform-admin': { label: 'Control Centre', to: '/control-centre' },
 };
 
 export function HomeGreeting() {
@@ -36,12 +36,12 @@ export function HomeGreeting() {
             <div className="gs-box"><span className="gs-value">{G.staleLearnings}</span><span className="gs-key">Learnings</span></div>
           </div>
         </div>
-        <Link to="/discover" className="gs gs-new" style={{ color: 'inherit', textDecoration: 'none' }}>
+        <Link to="/apps" className="gs gs-new" style={{ color: 'inherit', textDecoration: 'none' }}>
           <span className="gs-label"><LayoutGrid size={13} />New apps</span>
           <span className="gs-value">{G.newApps}</span>
           <span className="gs-sub">in the last 30 days</span>
         </Link>
-        <Link to="/learn" className="gs gs-new" style={{ color: 'inherit', textDecoration: 'none' }}>
+        <Link to="/learning/all" className="gs gs-new" style={{ color: 'inherit', textDecoration: 'none' }}>
           <span className="gs-label"><BookOpen size={13} />New learnings</span>
           <span className="gs-value">{G.newLearnings}</span>
           <span className="gs-sub">in the last 30 days</span>

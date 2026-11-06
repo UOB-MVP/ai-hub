@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRight, BookOpen, Compass, Eye, EyeOff, KeyRound, Lock, Rocket, ShieldCheck, UserCog } from 'lucide-react';
-import { Logo } from '@/components/layout/Logo';
+import { BrandMark } from '@/components/layout/Logo';
 import { usePersona } from '@/core/PersonaContext';
 import { DEFAULT_PERSONA, PERSONAS, getPersona } from '@/core/personas';
 import type { PersonaId } from '@/core/types';
@@ -34,7 +34,7 @@ export function LoginPage() {
   return (
     <div className="login">
       <section className="login-brand">
-        <Logo reversed height={46} />
+        <BrandMark reversed size="lg" />
         <div className="login-copy">
           <span className="login-eyebrow">UOB AI Hub</span>
           <h1>One place for AI at UOB.</h1>
@@ -51,7 +51,7 @@ export function LoginPage() {
 
       <section className="login-panel">
         <form className="login-card" onSubmit={submit}>
-          <div className="login-card-logo"><Logo height={34} /></div>
+          <div className="login-card-logo"><BrandMark /></div>
           <h2>Welcome back</h2>
           <p className="muted">Sign in with your UOB credentials to continue.</p>
 
