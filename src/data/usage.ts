@@ -1,6 +1,6 @@
 import type { UsageEntry } from '@/core/types';
 
-/** 14 days of mock per-user activity, used by the consumer "My Usage" view and owner/admin usage charts. */
+/** 14 days of mock per-user activity, used by the Bank User "My Usage" view and owner/admin usage charts. */
 function buildDailyUsage(appId: string, userId: string, baseTokens: number, baseRequests: number): UsageEntry[] {
   const days = 14;
   const out: UsageEntry[] = [];

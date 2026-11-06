@@ -1,6 +1,6 @@
 import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';
 import type { Persona, PersonaId, User } from './types';
-import { DEFAULT_PERSONA, getPersona } from './personas';
+import { DEFAULT_PERSONA, PERSONAS, getPersona } from './personas';
 import { CURRENT_USER } from '@/data/users';
 
 interface PersonaState {
@@ -15,12 +15,16 @@ const Ctx = createContext<PersonaState | null>(null);
 const KEY = 'uob-ai-hub:session';
 
 const read = (): PersonaId | null => {
-  try { return (sessionStorage.getItem(KEY) as PersonaId) || null; } catch { return null; }
+  try {
+    const v = sessionStorage.getItem(KEY);
+    // Ignore stale/unknown ids (e.g. the retired 'consumer' persona) so the user is simply asked to sign in again.
+    return PERSONAS.some((p) => p.id === v) ? (v as PersonaId) : null;
+  } catch { return null; }
 };
 
 /**
  * Demo session. In production replace signIn/signOut with the SSO flow and derive
- * the persona from the user's entitlements; consumers only use `usePersona()`.
+ * the persona from the user's entitlements; bank users only use `usePersona()`.
  */
 export function PersonaProvider({ children }: { children: ReactNode }) {
   const [id, setId] = useState<PersonaId | null>(read);

@@ -1,6 +1,6 @@
-import { ArrowUpRight, Lock, Star, Unlock } from 'lucide-react';
+import { Lock, Star, Unlock } from 'lucide-react';
 import { AppIcon } from '@/components/ui/AppIcon';
-import { Badge, Button } from '@/components/ui';
+import { Badge } from '@/components/ui';
 import type { AiApp } from '@/core/types';
 import { useAppAccess } from '@/core/useAppAccess';
 import './apps.css';
@@ -18,37 +18,52 @@ interface Props {
 export function AppCard({ app, onOpen, action, hasAccess = true }: Props) {
   const { favourites, toggleFavourite } = useAppAccess();
   const isFav = favourites.includes(app.id);
+  const pill = ({ 'View details': 'View', Launch: 'Open', 'Request access': 'Request' } as Record<string, string>)[action?.label ?? ''] ?? action?.label;
+  const open = hasAccess && !!action && action.label !== 'View details';
   return (
-    <article className="card card-hover app-card">
+    <article className="card app-card as-card">
+      <button className="as-main" onClick={() => onOpen(app)} aria-label={`Open ${app.name} details`}>
+        <AppIcon name={app.icon} hue={app.hue} size={76} />
+        <div className="as-text">
+          <h3>{app.name}</h3>
+          <p className="as-sub">{app.tagline}</p>
+          <span className="as-cat">{app.category}</span>
+        </div>
+      </button>
+      {action && (
+        <button
+          className={`as-get ${open ? 'as-open' : ''}`}
+          onClick={() => action.onClick(app)}
+          aria-label={`${action.label} ${app.name}`}
+        >
+          {pill}
+        </button>
+      )}
       <button
-        className="icon-btn app-card-fav"
+        className="icon-btn app-card-fav as-fav"
         aria-label={isFav ? `Remove ${app.name} from favourites` : `Add ${app.name} to favourites`}
         aria-pressed={isFav}
         onClick={(e) => { e.stopPropagation(); toggleFavourite(app.id); }}
       >
-        <Star size={16} fill={isFav ? 'currentColor' : 'none'} />
+        <Star size={15} fill={isFav ? 'currentColor' : 'none'} />
       </button>
-      <button className="app-card-main" onClick={() => onOpen(app)} aria-label={`Open ${app.name} details`}>
-        <div className="row app-card-top">
-          <AppIcon name={app.icon} hue={app.hue} />
-          <div className="grow">
-            <h3>{app.name}</h3>
-            <span className="app-owner">{app.department}</span>
-          </div>
-          <Badge tone={statusTone(app.status)}>{app.status}</Badge>
+      <div className="as-strip">
+        <div className="as-cell">
+          <strong>{app.ratingCount > 0 ? <>{app.rating.toFixed(1)} <Star size={12} fill="currentColor" /></> : '—'}</strong>
+          <span>{app.ratingCount} ratings</span>
         </div>
-        <p className="app-tagline">{app.tagline}</p>
-        <div className="chips tags">{app.tags.map((t) => <span key={t} className="badge badge-grey">{t}</span>)}</div>
-      </button>
-      <div className="app-card-foot">
-        <span className="stat">{app.access === 'All staff' ? <><Unlock size={14} />All staff</> : <><Lock size={14} />Request access</>}</span>
-        {app.ratingCount > 0 && <span className="stat"><Star size={14} fill="currentColor" />{app.rating.toFixed(1)} ({app.ratingCount})</span>}
-        <span className="grow" />
-        {action ? (
-          <Button size="sm" variant={hasAccess ? action.variant ?? 'primary' : 'ghost'} onClick={() => action.onClick(app)}>
-            {action.label}{hasAccess && <ArrowUpRight size={14} />}
-          </Button>
-        ) : null}
+        <div className="as-cell">
+          <strong>{app.userCount >= 1000 ? `${(app.userCount / 1000).toFixed(1)}K` : app.userCount}</strong>
+          <span>users</span>
+        </div>
+        <div className="as-cell">
+          <strong>{app.access === 'All staff' ? <Unlock size={15} /> : <Lock size={15} />}</strong>
+          <span>{app.access === 'All staff' ? 'All staff' : 'On request'}</span>
+        </div>
+        <div className="as-cell">
+          <Badge tone={statusTone(app.status)}>{app.status}</Badge>
+          <span>{app.version}</span>
+        </div>
       </div>
     </article>
   );

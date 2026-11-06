@@ -1,4 +1,4 @@
-export type PersonaId = 'consumer' | 'app-owner' | 'learning-moderator' | 'platform-admin';
+export type PersonaId = 'bank-user' | 'learning-moderator' | 'platform-admin';
 
 export interface Persona {
   id: PersonaId;
@@ -106,7 +106,7 @@ export interface AccessRequest {
   reason?: string;
 }
 
-export type AnnouncementAudience = 'all' | 'consumer' | 'app-owner';
+export type AnnouncementAudience = 'all' | 'bank-user';
 
 export interface Announcement {
   id: string;

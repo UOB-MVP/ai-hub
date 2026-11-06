@@ -1,23 +1,17 @@
-import { HomeHero } from './components/HomeHero';
-import { AnnouncementBanner } from './components/AnnouncementBanner';
-import { PersonaPanel } from './components/PersonaPanel';
-import { ThemeCards } from './components/ThemeCards';
+import { HomeGreeting } from './components/HomeGreeting';
 import { FeaturedApps } from './components/FeaturedApps';
-import { SectionHeader } from '@/components/ui';
-import { LearningAreaCards } from '@/components/learn/LearningAreaCards';
+import { HomeFeaturedLearning } from './components/HomeFeaturedLearning';
+import { MyApps } from './components/MyApps';
+import { MyLearning } from './components/MyLearning';
 
 export function HomePage() {
   return (
     <>
-      <HomeHero />
-      <AnnouncementBanner />
-      <PersonaPanel />
-      <ThemeCards />
+      <HomeGreeting />
       <FeaturedApps />
-      <section>
-        <SectionHeader title="Learn" subtitle="Prompts, news and use cases to grow your AI skills" />
-        <LearningAreaCards />
-      </section>
+      <HomeFeaturedLearning />
+      <MyApps />
+      <MyLearning />
     </>
   );
 }

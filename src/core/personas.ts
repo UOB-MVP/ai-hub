@@ -2,18 +2,11 @@ import type { Persona, PersonaId } from './types';
 
 export const PERSONAS: Persona[] = [
   {
-    id: 'consumer',
-    label: 'Consumer',
+    id: 'bank-user',
+    label: 'Bank User',
     tagline: 'Discover, use and learn',
     description: 'Browse the catalogue, launch apps you have access to, learn from the community and contribute tips and prompts.',
     can: { submitApps: false, manageOwnApps: false, moderateLearning: false, administerPlatform: false },
-  },
-  {
-    id: 'app-owner',
-    label: 'App Owner',
-    tagline: 'Publish and manage your AI apps',
-    description: 'Everything a consumer can do, plus register and manage the AI apps you own and track their adoption.',
-    can: { submitApps: true, manageOwnApps: true, moderateLearning: false, administerPlatform: false },
   },
   {
     id: 'learning-moderator',
@@ -31,5 +24,5 @@ export const PERSONAS: Persona[] = [
   },
 ];
 
-export const DEFAULT_PERSONA: PersonaId = 'consumer';
+export const DEFAULT_PERSONA: PersonaId = 'bank-user';
 export const getPersona = (id: PersonaId) => PERSONAS.find((p) => p.id === id)!;

@@ -18,11 +18,8 @@ interface NotificationsState {
 
 const Ctx = createContext<NotificationsState | null>(null);
 
-const audienceMatches = (audience: AnnouncementAudience, persona: PersonaId) => {
-  if (audience === 'all') return true;
-  if (audience === 'app-owner') return persona === 'app-owner' || persona === 'platform-admin';
-  return true; // 'consumer' is visible to everyone, including richer roles
-};
+// 'all' and 'bank-user' announcements are visible to every role, including richer ones.
+const audienceMatches = (_audience: AnnouncementAudience, _persona: PersonaId) => true;
 
 export function NotificationsProvider({ children }: { children: ReactNode }) {
   const [notifications, setNotifications] = useState<AppNotification[]>(SEED_NOTIFICATIONS);

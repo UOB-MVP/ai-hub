@@ -4,7 +4,7 @@ import { Badge, Button } from '@/components/ui';
 import { useNotifications } from '@/core/NotificationsContext';
 import type { AnnouncementAudience } from '@/core/types';
 
-const audienceLabel: Record<AnnouncementAudience, string> = { all: 'Everyone', consumer: 'Consumers', 'app-owner': 'App Owners & Admins' };
+const audienceLabel: Record<AnnouncementAudience, string> = { all: 'Everyone', 'bank-user': 'Bank Users' };
 
 export function AnnouncementsTab() {
   const { announcements, publishAnnouncement } = useNotifications();
@@ -21,8 +21,7 @@ export function AnnouncementsTab() {
         <div className="field"><label htmlFor="ann-aud">Audience</label>
           <select id="ann-aud" value={audience} onChange={(e) => setAudience(e.target.value as AnnouncementAudience)}>
             <option value="all">Everyone</option>
-            <option value="consumer">Consumers</option>
-            <option value="app-owner">App Owners & Admins</option>
+            <option value="bank-user">Bank Users</option>
           </select>
         </div>
         <Button size="sm" disabled={!valid} onClick={() => { publishAnnouncement({ title: title.trim(), body: body.trim(), audience }); setTitle(''); setBody(''); }}><Megaphone size={14} />Publish announcement</Button>

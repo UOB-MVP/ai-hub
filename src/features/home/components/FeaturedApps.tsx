@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, Star, Users, Zap } from 'lucide-react';
 import { SectionHeader } from '@/components/ui';
 import { AppIcon } from '@/components/ui/AppIcon';
 import { AppDetailModal } from '@/components/apps/AppDetailModal';
@@ -18,20 +18,30 @@ export function FeaturedApps() {
     <section>
       <SectionHeader title="Featured apps" subtitle="Hand-picked by the AI Hub team" />
       <div className="featured-apps">
-        <button className="fa-lead" onClick={() => setSel(lead)}>
+        <button className="fa-lead" onClick={() => setSel(lead)} style={{ ['--h' as string]: lead.hue }}>
           <span className="fa-eyebrow"><Sparkles size={14} />Featured · {lead.category}</span>
           <div className="row" style={{ gap: 14 }}>
             <AppIcon name={lead.icon} hue={lead.hue} size={52} />
-            <h3>{lead.name}</h3>
+            <div><h3>{lead.name}</h3><span className="fa-tag">{lead.tagline}</span></div>
           </div>
           <p>{lead.description}</p>
+          <div className="fa-stats">
+            <span><Star size={14} fill="currentColor" />{lead.rating.toFixed(1)} <em>({lead.ratingCount})</em></span>
+            <span><Users size={14} />{lead.userCount.toLocaleString()} users</span>
+            <span><Zap size={14} />{lead.requests30d.toLocaleString()} requests / 30d</span>
+          </div>
           <div className="fa-meta"><span>{lead.department}</span><span className="fa-cta">View details <ArrowRight size={15} /></span></div>
         </button>
         <div className="fa-side">
           {rest.slice(0, 2).map((a) => (
             <button key={a.id} className="card card-hover fa-mini" onClick={() => setSel(a)}>
-              <div className="row" style={{ gap: 12 }}><AppIcon name={a.icon} hue={a.hue} size={40} /><div><h4>{a.name}</h4><span className="muted small">{a.category}</span></div></div>
+              <div className="row" style={{ gap: 12 }}>
+                <AppIcon name={a.icon} hue={a.hue} size={40} />
+                <div className="grow"><h4>{a.name}</h4><span className="muted small">{a.category}</span></div>
+                <span className="fa-rate"><Star size={13} fill="currentColor" />{a.rating.toFixed(1)}</span>
+              </div>
               <p className="muted">{a.tagline}</p>
+              <span className="muted small"><Users size={12} /> {a.userCount.toLocaleString()} users</span>
             </button>
           ))}
         </div>

@@ -13,7 +13,7 @@ export const SEED_ANNOUNCEMENTS: Announcement[] = [
     id: 'ann-2',
     title: 'Branch BOT: investigating elevated response times',
     body: 'We are aware of intermittent slow responses on Branch BOT during peak hours and are investigating with the EGP Core team. No action is needed from app owners.',
-    audience: 'app-owner',
+    audience: 'all',
     createdAt: '2026-10-30',
     authorId: 'u-me',
   },
