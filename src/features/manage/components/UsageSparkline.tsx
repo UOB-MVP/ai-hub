@@ -1,7 +1,8 @@
 import type { UsageEntry } from '@/core/types';
 
-/** Minimal single-series trend + stat tiles for a mock usage log. No chart library needed for 14 points. */
-export function UsageSparkline({ entries, hue = 215 }: { entries: UsageEntry[]; hue?: number }) {
+/** Minimal single-series trend + stat tiles for a mock usage log. Only the trailing window is plotted so the chart stays readable even over a long history. */
+export function UsageSparkline({ entries: allEntries, hue = 215, days = 30 }: { entries: UsageEntry[]; hue?: number; days?: number }) {
+  const entries = allEntries.slice(-days);
   if (!entries.length) return <p className="muted" style={{ fontSize: 14 }}>No usage recorded yet.</p>;
 
   const totalTokens = entries.reduce((s, e) => s + e.tokens, 0);

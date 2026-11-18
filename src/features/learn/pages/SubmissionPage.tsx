@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Pencil } from 'lucide-react';
-import { Chip, EmptyState } from '@/components/ui';
+import { Archive, Pencil } from 'lucide-react';
+import { Button, Chip, EmptyState } from '@/components/ui';
 import { useContent } from '@/core/ContentContext';
 import { usePersona } from '@/core/PersonaContext';
 import type { ContentStatus } from '@/core/types';
 import { ContentCard, STATUS_LABEL } from '../components/ContentCard';
 
 type Filter = 'all' | Exclude<ContentStatus, 'draft'>;
-const FILTERS: Exclude<ContentStatus, 'draft'>[] = ['submitted', 'published', 'rejected'];
+const FILTERS: Exclude<ContentStatus, 'draft'>[] = ['submitted', 'published', 'rejected', 'archived'];
 
 /** /learning/submission – everything the user has sent for approval, with its status. Rejected items can be edited and resubmitted. */
 export function SubmissionPage() {
-  const { items } = useContent();
+  const { items, archive } = useContent();
   const { user } = usePersona();
   const [filter, setFilter] = useState<Filter>('all');
   const mine = items.filter((i) => i.authorId === user.id && i.status !== 'draft').sort((a, b) => b.createdAt.localeCompare(a.createdAt));
@@ -33,9 +33,16 @@ export function SubmissionPage() {
               key={i.id}
               item={i}
               showStatus
-              actions={i.status === 'rejected' && (
-                <div><Link to={`/learning/contribute/${i.id}`} className="btn btn-primary btn-sm"><Pencil size={14} />Edit &amp; resubmit</Link></div>
-              )}
+              actions={
+                i.status === 'rejected' ? (
+                  <div><Link to={`/learning/contribute/${i.id}`} className="btn btn-primary btn-sm"><Pencil size={14} />Edit &amp; resubmit</Link></div>
+                ) : i.status === 'published' ? (
+                  <div className="row" style={{ gap: 8 }}>
+                    <Link to={`/learning/contribute/${i.id}`} className="btn btn-ghost btn-sm"><Pencil size={14} />Edit (new version)</Link>
+                    <Button size="sm" variant="ghost" onClick={() => archive(i.id)}><Archive size={14} />Archive</Button>
+                  </div>
+                ) : undefined
+              }
             />
           ))}
         </div>

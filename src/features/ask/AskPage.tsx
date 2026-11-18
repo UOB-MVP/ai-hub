@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { Bot, Send, ShieldCheck, Sparkles, User as UserIcon } from 'lucide-react';
 import { PageHero } from '@/components/ui';
 import { useContent } from '@/core/ContentContext';
-import type { LearningContent } from '@/core/types';
+import { usePlatform } from '@/core/PlatformContext';
+import type { AiApp, LearningContent } from '@/core/types';
 import './ask.css';
 
 const STOPWORDS = new Set(['the', 'a', 'an', 'is', 'are', 'was', 'were', 'how', 'what', 'when', 'where', 'why', 'to', 'of', 'for', 'in', 'on', 'and', 'or', 'do', 'does', 'can', 'i', 'my', 'me', 'you', 'your']);
@@ -12,14 +13,21 @@ function tokenize(text: string): string[] {
   return text.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter((w) => w.length > 2 && !STOPWORDS.has(w));
 }
 
-function bestMatch(query: string, items: LearningContent[]): { item: LearningContent; score: number } | null {
+type Match = { kind: 'learning'; item: LearningContent; score: number } | { kind: 'app'; item: AiApp; score: number };
+
+function bestMatch(query: string, learning: LearningContent[], apps: AiApp[]): Match | null {
   const qTokens = new Set(tokenize(query));
   if (!qTokens.size) return null;
-  let best: { item: LearningContent; score: number } | null = null;
-  for (const item of items) {
+  let best: Match | null = null;
+  for (const item of learning) {
     const haystack = tokenize(`${item.title} ${item.summary} ${item.body ?? ''} ${item.tags.join(' ')}`);
     const overlap = haystack.filter((w) => qTokens.has(w)).length;
-    if (overlap > 0 && (!best || overlap > best.score)) best = { item, score: overlap };
+    if (overlap > 0 && (!best || overlap > best.score)) best = { kind: 'learning', item, score: overlap };
+  }
+  for (const item of apps) {
+    const haystack = tokenize(`${item.name} ${item.tagline} ${item.description} ${item.tags.join(' ')}`);
+    const overlap = haystack.filter((w) => qTokens.has(w)).length;
+    if (overlap > 0 && (!best || overlap > best.score)) best = { kind: 'app', item, score: overlap };
   }
   return best;
 }
@@ -28,33 +36,36 @@ interface Message {
   id: string;
   role: 'user' | 'assistant';
   text: string;
-  source?: LearningContent;
+  source?: { label: string; to: string };
   uncertain?: boolean;
 }
 
 export function AskPage() {
   const { items } = useContent();
+  const { publishedApps } = usePlatform();
   const published = items.filter((i) => i.status === 'published');
   const [messages, setMessages] = useState<Message[]>([
-    { id: 'm-0', role: 'assistant', text: "Ask me anything about AI Hub apps, tips, prompts or news. I only answer from published Learn content and I'll say so when I can't find a confident answer." },
+    { id: 'm-0', role: 'assistant', text: "Ask me anything about AI Hub apps, tips, prompts or news. I only answer from published Learn content and approved apps, and I'll say so when I can't find a confident answer." },
   ]);
   const [input, setInput] = useState('');
 
   const ask = () => {
     const q = input.trim();
     if (!q) return;
-    const match = bestMatch(q, published);
+    const match = bestMatch(q, published, publishedApps);
     const userMsg: Message = { id: `m-${Date.now()}-u`, role: 'user', text: q };
     const reply: Message = match
-      ? { id: `m-${Date.now()}-a`, role: 'assistant', text: match.item.body ?? match.item.summary, source: match.item }
-      : { id: `m-${Date.now()}-a`, role: 'assistant', text: "I don't have enough approved AI Hub content to answer that confidently. Try rephrasing, or browse Learn for related tips and prompts.", uncertain: true };
+      ? match.kind === 'learning'
+        ? { id: `m-${Date.now()}-a`, role: 'assistant', text: match.item.body ?? match.item.summary, source: { label: match.item.title, to: '/learning/all' } }
+        : { id: `m-${Date.now()}-a`, role: 'assistant', text: match.item.description, source: { label: match.item.name, to: '/apps' } }
+      : { id: `m-${Date.now()}-a`, role: 'assistant', text: "I don't have enough approved AI Hub content to answer that confidently. Try rephrasing, or browse Learning for related tips and prompts.", uncertain: true };
     setMessages((prev) => [...prev, userMsg, reply]);
     setInput('');
   };
 
   return (
     <>
-      <PageHero eyebrow="Ask Me Anything" title="Ask AI Hub" description="Answers are grounded in published AI Hub Learn content only, with a source you can check. If no approved content supports an answer, I'll tell you rather than guess." />
+      <PageHero eyebrow="Ask Me Anything" title="Ask AI Hub" description="Answers are grounded in published AI Hub Learn content and approved apps only, with a source you can check. If no approved content supports an answer, I'll tell you rather than guess." />
       <div className="card ask-panel">
         <div className="ask-thread">
           {messages.map((m) => (
@@ -66,7 +77,7 @@ export function AskPage() {
                 )}
                 <p>{m.text}</p>
                 {m.source && (
-                  <Link to="/learning/all" className="ask-source"><ShieldCheck size={13} />Source: {m.source.title}</Link>
+                  <Link to={m.source.to} className="ask-source"><ShieldCheck size={13} />Source: {m.source.label}</Link>
                 )}
               </div>
             </div>

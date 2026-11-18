@@ -3,14 +3,14 @@ import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { CONTENT_TYPES, LEARN_CATEGORIES } from '@/data/learning';
-import type { ContentType, LearnCategory } from '@/core/types';
+import type { ContentType, LearnCategory, LearningContent } from '@/core/types';
 import { useContent } from '@/core/ContentContext';
 import { usePersona } from '@/core/PersonaContext';
 
 /** /learning/contribute (new) and /learning/contribute/:id (edit a draft, or fix a rejected item and resubmit). */
 export function ContributePage() {
   const { id } = useParams();
-  const { items, save } = useContent();
+  const { items, save, guideline } = useContent();
   const { user } = usePersona();
   const nav = useNavigate();
   const existing = id ? items.find((i) => i.id === id) : undefined;
@@ -22,20 +22,24 @@ export function ContributePage() {
   const [body, setBody] = useState(existing?.body ?? '');
   const [tags, setTags] = useState(existing?.tags.join(', ') ?? '');
 
-  // Only the author may edit, and only while it is a draft or has been rejected.
-  if (id && (!existing || existing.authorId !== user.id || (existing.status !== 'draft' && existing.status !== 'rejected'))) {
+  // Only the author may edit: a draft or rejected item in place, or a published item as a new pending revision.
+  const editable: LearningContent['status'][] = ['draft', 'rejected', 'published'];
+  if (id && (!existing || existing.authorId !== user.id || !editable.includes(existing.status))) {
     return <Navigate to="/learning/submission" replace />;
   }
   const resubmitting = existing?.status === 'rejected';
+  const revising = existing?.status === 'published';
   const valid = title.trim().length >= 8 && summary.trim().length >= 20;
   const payload = () => ({ type, category, title: title.trim(), summary: summary.trim(), body: body.trim() || undefined, tags: tags.split(',').map((t) => t.trim()).filter(Boolean) });
 
   return (
     <section className="contribute">
-      <Link to={existing?.status === 'rejected' ? '/learning/submission' : '/learning/all'} className="app-row-link"><ArrowLeft size={14} />Back</Link>
-      <h2>{resubmitting ? 'Edit & resubmit' : existing ? 'Edit draft' : 'Contribute to Learning'}</h2>
+      <Link to={existing && existing.status !== 'draft' ? '/learning/submission' : '/learning/all'} className="app-row-link"><ArrowLeft size={14} />Back</Link>
+      <h2>{resubmitting ? 'Edit & resubmit' : revising ? `Edit "${existing?.title}" (new version)` : existing ? 'Edit draft' : 'Contribute to Learning'}</h2>
       <p className="muted" style={{ fontSize: 14 }}>
-        Share what works. A Learning Moderator reviews every submission before it is published. Submissions are screened for sensitive data, so do not include customer data or confidential information.
+        {revising
+          ? `This creates a new pending version for Learning Moderator review. "${existing?.title}" stays published as-is until the update is approved.`
+          : guideline}
       </p>
       {resubmitting && existing?.rejectionReason && <p className="reject-note"><strong>Moderator feedback:</strong> {existing.rejectionReason}</p>}
       <div className="card contribute-form">
@@ -52,10 +56,12 @@ export function ContributePage() {
         <div className="field"><label htmlFor="c-body">{type === 'prompt' ? 'Prompt text' : 'Details'} (optional)</label><textarea id="c-body" rows={6} value={body} onChange={(e) => setBody(e.target.value)} /></div>
         <div className="field"><label htmlFor="c-tags">Tags</label><input id="c-tags" value={tags} onChange={(e) => setTags(e.target.value)} placeholder="comma, separated" /></div>
         <div className="row" style={{ gap: 10, justifyContent: 'flex-end', flexWrap: 'wrap' }}>
-          {!resubmitting && (
+          {!resubmitting && !revising && (
             <Button variant="ghost" disabled={title.trim().length < 3} onClick={() => { save(payload(), { id: existing?.id }); nav('/learning/draft'); }}>Save as draft</Button>
           )}
-          <Button disabled={!valid} onClick={() => { save(payload(), { id: existing?.id, submit: true }); nav('/learning/submission'); }}>{resubmitting ? 'Resubmit for approval' : 'Submit for approval'}</Button>
+          <Button disabled={!valid} onClick={() => { save(payload(), { id: existing?.id, submit: true }); nav('/learning/submission'); }}>
+            {resubmitting ? 'Resubmit for approval' : revising ? 'Submit update for review' : 'Submit for approval'}
+          </Button>
         </div>
       </div>
     </section>

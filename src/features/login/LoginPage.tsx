@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { ArrowRight, BookOpen, Compass, Eye, EyeOff, KeyRound, Lock, Rocket, ShieldCheck, UserCog } from 'lucide-react';
+import { ArrowRight, BookOpen, Check, Compass, Eye, EyeOff, KeyRound, Lock, Rocket, ShieldCheck, UserCog } from 'lucide-react';
 import { BrandMark } from '@/components/layout/Logo';
 import { usePersona } from '@/core/PersonaContext';
 import { DEFAULT_PERSONA, PERSONAS, getPersona } from '@/core/personas';
@@ -14,13 +14,15 @@ const PILLARS = [
 ];
 
 export function LoginPage() {
-  const { isAuthenticated, signIn } = usePersona();
+  const { isAuthenticated, signIn, requestRoleUpgrade } = usePersona();
   const nav = useNavigate();
   const from = (useLocation().state as { from?: string } | null)?.from ?? '/home';
   const [role, setRole] = useState<PersonaId>(DEFAULT_PERSONA);
   const [show, setShow] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [upgradeRequested, setUpgradeRequested] = useState(false);
   const selected = getPersona(role);
+  const canRequestUpgrade = role === 'learning-moderator' || role === 'platform-admin';
 
   if (isAuthenticated && !busy) return <Navigate to="/home" replace />;
 
@@ -69,10 +71,19 @@ export function LoginPage() {
 
           <div className="field">
             <label htmlFor="l-role"><UserCog size={14} /> Sign in as</label>
-            <select id="l-role" value={role} onChange={(e) => setRole(e.target.value as PersonaId)}>
+            <select id="l-role" value={role} onChange={(e) => { setRole(e.target.value as PersonaId); setUpgradeRequested(false); }}>
               {PERSONAS.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}
             </select>
             <div className="role-note" aria-live="polite"><strong>{selected.tagline}</strong><span>{selected.description}</span></div>
+            {canRequestUpgrade && (
+              upgradeRequested ? (
+                <span className="role-upgrade-note sent" aria-live="polite"><Check size={13} />Request sent — a Platform Admin will review your AD group access.</span>
+              ) : (
+                <button type="button" className="role-upgrade-note" onClick={() => { requestRoleUpgrade(role); setUpgradeRequested(true); }}>
+                  Request AD group access for {selected.label}
+                </button>
+              )
+            )}
           </div>
 
           <button className="btn btn-accent login-submit" type="submit" disabled={busy}>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Ban, Check, PackagePlus, Rocket, ShieldCheck, Trash2 } from 'lucide-react';
-import { Badge, Button } from '@/components/ui';
+import { Ban, Check, PackagePlus, Plus, Rocket, ShieldCheck, Trash2, X } from 'lucide-react';
+import { Badge, Button, Chip } from '@/components/ui';
 import { AppIcon } from '@/components/ui/AppIcon';
 import { statusTone } from '@/components/apps/AppCard';
 import { usePlatform } from '@/core/PlatformContext';
@@ -13,7 +13,10 @@ const healthTone = (h: AiApp['health']) => (h === 'healthy' ? 'green' : h === 'd
 const raiTone = (r: AiApp['raiStatus']) => (r === 'approved' ? 'green' : r === 'pending' ? 'amber' : 'grey');
 
 export function AppsTab() {
-  const { apps, updateApp, publishApp, retireApp, assignOwner, toggleAppBlocked, createPlaceholder, users } = usePlatform();
+  const {
+    apps, updateApp, publishApp, retireApp, assignOwner, toggleAppBlocked, createPlaceholder, users,
+    appTags, addAppTag, removeAppTag, defaultSessionTimeoutMinutes, setDefaultSessionTimeout,
+  } = usePlatform();
   const [creating, setCreating] = useState(false);
   const [name, setName] = useState('');
   const [category, setCategory] = useState<AppCategory>(APP_CATEGORIES[0] as AppCategory);
@@ -21,12 +24,38 @@ export function AppsTab() {
   const [retireNote, setRetireNote] = useState('');
   const [assigning, setAssigning] = useState<string | null>(null);
   const [ownerPick, setOwnerPick] = useState('');
+  const [newTag, setNewTag] = useState('');
 
   const onboarding = apps.filter((a) => a.lifecycle === 'onboarding');
   const assignableUsers = users.filter((u) => u.id !== 'u-unassigned');
 
   return (
     <div className="stack" style={{ gap: 28 }}>
+      <div>
+        <h3 style={{ marginBottom: 10 }}>App governance</h3>
+        <div className="card" style={{ padding: 14 }}>
+          <div className="stack" style={{ gap: 14 }}>
+            <div className="field" style={{ maxWidth: 260 }}>
+              <label htmlFor="default-timeout">Default session timeout (minutes)</label>
+              <input id="default-timeout" type="number" min={1} value={defaultSessionTimeoutMinutes} onChange={(e) => setDefaultSessionTimeout(Number(e.target.value) || 1)} />
+              <span className="hint">Applies to any app without its own override.</span>
+            </div>
+            <div className="field">
+              <label>Predefined app tags</label>
+              <div className="chips">
+                {appTags.map((t) => (
+                  <Chip key={t} active onClick={() => removeAppTag(t)}>{t}<X size={12} /></Chip>
+                ))}
+              </div>
+              <div className="row" style={{ gap: 8, marginTop: 8 }}>
+                <input value={newTag} onChange={(e) => setNewTag(e.target.value)} placeholder="Add a tag" style={{ flex: 1 }} />
+                <Button size="sm" variant="ghost" onClick={() => { if (newTag.trim()) { addAppTag(newTag.trim()); setNewTag(''); } }}><Plus size={14} />Add</Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {onboarding.length > 0 && (
         <div>
           <h3 style={{ marginBottom: 10 }}>Pending onboarding ({onboarding.length})</h3>

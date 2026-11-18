@@ -34,6 +34,7 @@
 .as-get.as-open { background: var(--uob-blue-700); color: #fff; }
 .as-get.as-open:hover { background: var(--uob-blue-900); }
 .as-get:focus-visible { outline: 3px solid var(--uob-blue-600); outline-offset: 2px; }
+.as-new { position: absolute; top: 10px; left: 10px; z-index: 1; background: var(--uob-red); color: #fff; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; padding: 2px 9px; border-radius: 999px; }
 .as-fav { top: 8px; right: 8px; width: 28px; height: 28px; box-shadow: none; background: transparent; }
 .as-card:hover .as-fav, .as-fav[aria-pressed='true'] { opacity: 1; }
 .as-fav { opacity: 0; transition: .15s; } .as-fav:focus-visible { opacity: 1; }

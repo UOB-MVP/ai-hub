@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Check, Plus, Trash2, X } from 'lucide-react';
-import { Avatar, Badge, Button, Modal, Tabs } from '@/components/ui';
+import { Check, Download, Plus, Trash2, X } from 'lucide-react';
+import { Avatar, Badge, Button, Chip, Modal, Tabs } from '@/components/ui';
 import { statusTone } from '@/components/apps/AppCard';
 import type { AiApp } from '@/core/types';
-import { usePlatform } from '@/core/PlatformContext';
+import { isAppNew, usePlatform } from '@/core/PlatformContext';
 import { getUser } from '@/data/users';
 import { UsageSparkline } from './UsageSparkline';
 
@@ -12,7 +12,7 @@ type Tab = 'overview' | 'access' | 'feedback' | 'usage' | 'retire';
 const lifecycleTone = (l: AiApp['lifecycle']) => (l === 'published' ? 'green' : l === 'retired' ? 'grey' : 'amber');
 
 export function AppOwnerModal({ app, onClose }: { app: AiApp; onClose: () => void }) {
-  const { updateApp, requestsForApp, resolveRequest, feedbackForApp, usageForApp, retireApp } = usePlatform();
+  const { updateAppMetadata, requestsForApp, resolveRequest, feedbackForApp, exportFeedback, usageForApp, retireApp, appTags, setAppSessionTimeout, setNewBadge, defaultSessionTimeoutMinutes } = usePlatform();
   const [tab, setTab] = useState<Tab>('overview');
 
   const [tagline, setTagline] = useState(app.tagline);
@@ -22,8 +22,10 @@ export function AppOwnerModal({ app, onClose }: { app: AiApp; onClose: () => voi
   const [supportContact, setSupportContact] = useState(app.supportContact);
   const [whatsNew, setWhatsNew] = useState(app.whatsNew);
   const [newNote, setNewNote] = useState('');
+  const [tags, setTags] = useState(app.tags);
   const [tokenLimit, setTokenLimit] = useState(app.tokenLimitPerUser ?? 0);
   const [requestLimit, setRequestLimit] = useState(app.requestLimitPerUser ?? 0);
+  const [sessionTimeout, setSessionTimeout] = useState(app.sessionTimeoutMinutes ?? 0);
 
   const [rejecting, setRejecting] = useState<string | null>(null);
   const [reason, setReason] = useState('');
@@ -34,12 +36,15 @@ export function AppOwnerModal({ app, onClose }: { app: AiApp; onClose: () => voi
   const usage = usageForApp(app.id);
 
   const saveMetadata = () => {
-    updateApp(app.id, { tagline, description, version, releaseDate, supportContact, whatsNew });
+    updateAppMetadata(app.id, { tagline, description, version, releaseDate, supportContact, whatsNew, tags });
   };
 
   const saveLimits = () => {
-    updateApp(app.id, { tokenLimitPerUser: tokenLimit || undefined, requestLimitPerUser: requestLimit || undefined });
+    updateAppMetadata(app.id, { tokenLimitPerUser: tokenLimit || undefined, requestLimitPerUser: requestLimit || undefined });
+    setAppSessionTimeout(app.id, sessionTimeout || undefined);
   };
+
+  const toggleTag = (t: string) => setTags((cur) => (cur.includes(t) ? cur.filter((x) => x !== t) : [...cur, t]));
 
   return (
     <Modal title={app.name} onClose={onClose} footer={<Button variant="ghost" onClick={onClose}>Close</Button>}>
@@ -71,6 +76,18 @@ export function AppOwnerModal({ app, onClose }: { app: AiApp; onClose: () => voi
               <div className="field grow"><label htmlFor="release">Release date</label><input id="release" type="date" value={releaseDate} onChange={(e) => setReleaseDate(e.target.value)} /></div>
             </div>
             <div className="field"><label htmlFor="support">Support contact</label><input id="support" value={supportContact} onChange={(e) => setSupportContact(e.target.value)} /></div>
+            <div className="field"><label>Tags</label>
+              <div className="chips">{appTags.map((t) => <Chip key={t} active={tags.includes(t)} onClick={() => toggleTag(t)}>{t}</Chip>)}</div>
+            </div>
+            <div className="field"><label>"NEW" banner</label>
+              <div className="row" style={{ gap: 8, flexWrap: 'wrap' }}>
+                {isAppNew(app) ? <Badge tone="amber">New until {app.newBadge?.expiresAt}</Badge> : <span className="muted" style={{ fontSize: 13 }}>Not shown</span>}
+                <Button size="sm" variant="ghost" onClick={() => setNewBadge(app.id, 7)}>7 days</Button>
+                <Button size="sm" variant="ghost" onClick={() => setNewBadge(app.id, 14)}>14 days</Button>
+                <Button size="sm" variant="ghost" onClick={() => setNewBadge(app.id, 30)}>30 days</Button>
+                {app.newBadge && <Button size="sm" variant="ghost" onClick={() => setNewBadge(app.id, null)}>Clear</Button>}
+              </div>
+            </div>
             <div className="field">
               <label>What's new</label>
               <div className="stack" style={{ gap: 6 }}>
@@ -96,6 +113,7 @@ export function AppOwnerModal({ app, onClose }: { app: AiApp; onClose: () => voi
               <div className="field grow"><label htmlFor="tl">Token limit per user (per 30 days)</label><input id="tl" type="number" min={0} value={tokenLimit} onChange={(e) => setTokenLimit(Number(e.target.value))} /></div>
               <div className="field grow"><label htmlFor="rl">Request limit per user (per 30 days)</label><input id="rl" type="number" min={0} value={requestLimit} onChange={(e) => setRequestLimit(Number(e.target.value))} /></div>
             </div>
+            <div className="field grow"><label htmlFor="to">Session timeout (minutes)</label><input id="to" type="number" min={0} value={sessionTimeout} onChange={(e) => setSessionTimeout(Number(e.target.value))} placeholder={`Platform default: ${defaultSessionTimeoutMinutes}`} /></div>
             <Button size="sm" onClick={saveLimits} style={{ alignSelf: 'flex-start' }}><Check size={14} />Save limits</Button>
 
             <div>
@@ -143,6 +161,7 @@ export function AppOwnerModal({ app, onClose }: { app: AiApp; onClose: () => voi
         {tab === 'feedback' && (
           feedback.length ? (
             <div className="stack" style={{ gap: 10 }}>
+              <Button size="sm" variant="ghost" onClick={() => exportFeedback(app.id)} style={{ alignSelf: 'flex-start' }}><Download size={14} />Export to CSV</Button>
               {feedback.map((f) => {
                 const author = getUser(f.userId);
                 return (

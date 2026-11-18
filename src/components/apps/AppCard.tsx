@@ -3,6 +3,7 @@ import { AppIcon } from '@/components/ui/AppIcon';
 import { Badge } from '@/components/ui';
 import type { AiApp } from '@/core/types';
 import { useAppAccess } from '@/core/useAppAccess';
+import { isAppNew } from '@/core/PlatformContext';
 import './apps.css';
 
 export const statusTone = (s: AiApp['status']) => (s === 'Live' ? 'green' : s === 'Beta' ? 'amber' : 'grey');
@@ -22,6 +23,7 @@ export function AppCard({ app, onOpen, action, hasAccess = true }: Props) {
   const open = hasAccess && !!action && action.label !== 'View details';
   return (
     <article className="card app-card as-card">
+      {isAppNew(app) && <span className="as-new">New</span>}
       <button className="as-main" onClick={() => onOpen(app)} aria-label={`Open ${app.name} details`}>
         <AppIcon name={app.icon} hue={app.hue} size={76} />
         <div className="as-text">

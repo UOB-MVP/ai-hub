@@ -2,6 +2,7 @@ import { ArrowUpRight, Building2, Lock, Star, Unlock, Users } from 'lucide-react
 import { AppIcon } from '@/components/ui/AppIcon';
 import { Badge } from '@/components/ui';
 import { statusTone } from '@/components/apps/AppCard';
+import { isAppNew } from '@/core/PlatformContext';
 import type { AiApp } from '@/core/types';
 
 interface Props {
@@ -24,6 +25,7 @@ export function AppListRow({ app, hasAccess, requested, onOpen, onLaunch, onRequ
             <h3>{app.name}</h3>
             <Badge tone={statusTone(app.status)}>{app.status}</Badge>
             {app.featured && <Badge tone="blue">Featured</Badge>}
+            {isAppNew(app) && <Badge tone="red">New</Badge>}
             <span className="app-row-ver">{app.version}</span>
           </div>
           <p className="app-row-desc">{app.description}</p>

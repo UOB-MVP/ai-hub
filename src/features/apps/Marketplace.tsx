@@ -9,7 +9,7 @@ import { useAppAccess } from '@/core/useAppAccess';
 import type { AiApp } from '@/core/types';
 import './apps-market.css';
 
-type Sort = 'featured' | 'rating' | 'users' | 'newest' | 'name';
+type Sort = 'featured' | 'rating' | 'users' | 'newest' | 'name' | 'country';
 type View = 'grid' | 'list';
 const VIEW_KEY = 'uob-ai-hub:apps-view';
 const readView = (): View => { try { return localStorage.getItem(VIEW_KEY) === 'list' ? 'list' : 'grid'; } catch { return 'grid'; } };
@@ -33,6 +33,12 @@ export function Marketplace() {
           case 'users': return b.userCount - a.userCount;
           case 'newest': return b.releaseDate.localeCompare(a.releaseDate);
           case 'name': return a.name.localeCompare(b.name);
+          case 'country': {
+            if (!a.countries?.length && !b.countries?.length) return a.name.localeCompare(b.name);
+            if (!a.countries?.length) return 1;
+            if (!b.countries?.length) return -1;
+            return a.countries[0].localeCompare(b.countries[0]) || a.name.localeCompare(b.name);
+          }
           default: return (a.featuredPriority ?? 99) - (b.featuredPriority ?? 99) || Number(!!b.featured) - Number(!!a.featured);
         }
       });
@@ -51,6 +57,7 @@ export function Marketplace() {
               <option value="users">Most used</option>
               <option value="newest">Recently updated</option>
               <option value="name">A–Z</option>
+              <option value="country">Country</option>
             </select>
           </label>
           <div className="view-toggle" role="group" aria-label="View">

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AlertTriangle, Check, Clock, Heart, Lightbulb, MessageSquareText, Newspaper, Presentation, Share2, Star, type LucideIcon } from 'lucide-react';
+import { AlertTriangle, Check, Clipboard, Clock, Heart, Lightbulb, MessageSquareText, Newspaper, Presentation, Share2, Star, type LucideIcon } from 'lucide-react';
 import { Avatar, Badge, Button } from '@/components/ui';
 import type { ContentStatus, ContentType, LearningContent } from '@/core/types';
 import { getUser } from '@/data/users';
@@ -12,22 +12,24 @@ export const TYPE_META: Record<ContentType, { label: string; icon: LucideIcon; h
   news: { label: 'News', icon: Newspaper, hue: 160 },
   showcase: { label: 'Showcase', icon: Presentation, hue: 335 },
 };
-export const STATUS_TONE: Record<ContentStatus, 'grey' | 'amber' | 'green' | 'red'> = { draft: 'grey', submitted: 'amber', published: 'green', rejected: 'red' };
-export const STATUS_LABEL: Record<ContentStatus, string> = { draft: 'Draft', submitted: 'Submitted · in review', published: 'Approved', rejected: 'Rejected' };
+export const STATUS_TONE: Record<ContentStatus, 'grey' | 'amber' | 'green' | 'red'> = { draft: 'grey', submitted: 'amber', published: 'green', rejected: 'red', archived: 'grey' };
+export const STATUS_LABEL: Record<ContentStatus, string> = { draft: 'Draft', submitted: 'Submitted · in review', published: 'Approved', rejected: 'Rejected', archived: 'Archived' };
 
 export function ContentCard({ item, showStatus = false, actions }: { item: LearningContent; showStatus?: boolean; actions?: React.ReactNode }) {
-  const { toggleLike, commentsFor, addComment } = useContent();
+  const { toggleLike, toggleFavourite, favourites, commentsFor, addComment } = useContent();
   const meta = TYPE_META[item.type];
   const Icon = meta.icon;
   const author = getUser(item.authorId);
   const comments = commentsFor(item.id);
   const rated = comments.filter((c) => c.rating);
   const avgRating = rated.length ? rated.reduce((s, c) => s + (c.rating ?? 0), 0) / rated.length : 0;
+  const isFav = favourites.includes(item.id);
 
   const [open, setOpen] = useState(false);
   const [draftRating, setDraftRating] = useState(0);
   const [draftBody, setDraftBody] = useState('');
   const [shared, setShared] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const submitComment = () => {
     if (!draftBody.trim()) return;
@@ -43,6 +45,20 @@ export function ContentCard({ item, showStatus = false, actions }: { item: Learn
     setTimeout(() => setShared(false), 1500);
   };
 
+  const copyText = async () => {
+    const text = `${item.title}\n\n${item.summary}${item.body ? `\n\n${item.body}` : ''}`;
+    try {
+      if (navigator.clipboard && 'write' in navigator.clipboard && typeof ClipboardItem !== 'undefined') {
+        const html = `<h3>${item.title}</h3><p>${item.summary}</p>${item.body ? `<p>${item.body}</p>` : ''}`;
+        await navigator.clipboard.write([new ClipboardItem({ 'text/plain': new Blob([text], { type: 'text/plain' }), 'text/html': new Blob([html], { type: 'text/html' }) })]);
+      } else {
+        await navigator.clipboard.writeText(text);
+      }
+    } catch { /* clipboard unavailable */ }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+
   return (
     <article className="card card-hover content-card">
       <div className="row" style={{ gap: 10 }}>
@@ -50,6 +66,11 @@ export function ContentCard({ item, showStatus = false, actions }: { item: Learn
         <Badge tone="grey">{item.category}</Badge>
         <span className="grow" />
         {showStatus && <Badge tone={STATUS_TONE[item.status]}>{STATUS_LABEL[item.status]}</Badge>}
+        {item.status === 'published' && (
+          <button type="button" className="icon-btn" aria-label={isFav ? 'Remove from favourites' : 'Add to favourites'} aria-pressed={isFav} onClick={() => toggleFavourite(item.id)} style={{ color: isFav ? '#d99a00' : undefined }}>
+            <Star size={16} fill={isFav ? 'currentColor' : 'none'} />
+          </button>
+        )}
       </div>
       <h3>{item.title}</h3>
       <p className="muted">{item.summary}</p>
@@ -68,6 +89,11 @@ export function ContentCard({ item, showStatus = false, actions }: { item: Learn
         <span className="grow" />
         <span className="stat"><Clock size={14} />{item.readMins} min</span>
         {avgRating > 0 && <span className="stat"><Star size={13} fill="currentColor" />{avgRating.toFixed(1)}</span>}
+        {item.status === 'published' && (
+          <button type="button" className="like" onClick={copyText} aria-label="Copy text">
+            {copied ? <Check size={14} /> : <Clipboard size={14} />}{copied ? 'Copied' : 'Copy'}
+          </button>
+        )}
         {item.status === 'published' && (
           <button type="button" className="like" onClick={share} aria-label="Share">
             {shared ? <Check size={14} /> : <Share2 size={14} />}{shared ? 'Copied' : 'Share'}

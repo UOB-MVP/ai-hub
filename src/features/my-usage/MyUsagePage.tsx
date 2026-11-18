@@ -24,7 +24,7 @@ export function MyUsagePage() {
       <PageHero eyebrow="My Statistics" title="Your activity on AI Hub" description="A personal view of the apps you use, your token consumption and your access requests." />
 
       <section>
-        <SectionHeader title="Usage summary" subtitle={`${totalTokens.toLocaleString()} tokens · ${totalRequests.toLocaleString()} requests over the last 14 days`} />
+        <SectionHeader title="Usage summary" subtitle={`${totalTokens.toLocaleString()} tokens · ${totalRequests.toLocaleString()} requests across your full activity history`} />
         {byApp.length ? (
           <div className="grid grid-2">
             {byApp.map(({ app, entries }) => app && (

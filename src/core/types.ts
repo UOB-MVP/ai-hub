@@ -24,6 +24,9 @@ export interface User {
   department: string;
   avatarColor: string;
   status: UserStatus;
+  /** Bank login id (LAN ID), surfaced in monitoring/audit reports per BRD Platform Monitoring requirements. */
+  lanId: string;
+  country: string;
 }
 
 /* ---------- Apps ---------- */
@@ -83,6 +86,14 @@ export interface AiApp {
   raiEvidence?: string;
   /** Emergency kill-switch a Platform Admin can flip independent of lifecycle, e.g. to mitigate risk. */
   blocked?: boolean;
+
+  /** Countries and languages the app is approved for, shown in the "More details" popup and used for App page filtering/sorting. */
+  countries?: string[];
+  languages?: string[];
+  /** Minutes of inactivity before AI Hub ends the session, configurable per app by a Platform Admin; falls back to the platform default when unset. */
+  sessionTimeoutMinutes?: number;
+  /** "NEW" ribbon on the app card, shown on AiApp cards until it auto-expires. Set by a Platform Admin at onboarding or from App Management. */
+  newBadge?: { expiresAt: string };
 }
 
 export interface AppFeedback {
@@ -137,12 +148,58 @@ export interface UsageEntry {
   date: string; // ISO date
   tokens: number;
   requests: number;
+  country: string;
+  sessionId: string;
+  activityType: 'normal_use' | 'heavy_use';
+  requestCount: number;
+}
+
+/* ---------- Audit log / Platform Monitoring ---------- */
+export type AuditAction =
+  | 'login'
+  | 'app_launch'
+  | 'favourite_app_add' | 'favourite_app_remove'
+  | 'favourite_learning_add' | 'favourite_learning_remove'
+  | 'access_requested' | 'access_approved' | 'access_rejected'
+  | 'app_onboarded' | 'app_metadata_updated' | 'app_archived' | 'app_tag_updated'
+  | 'learning_submitted' | 'learning_approved' | 'learning_rejected' | 'learning_tag_updated' | 'learning_archived'
+  | 'role_upgrade_requested';
+
+export type ActivityType = 'login' | 'launch' | 'request' | 'content' | 'governance';
+
+/** A single tracked platform event. Powers Platform Monitoring (BRD 7.1-7.6) and governance audit trails. */
+export interface AuditLogEntry {
+  id: string;
+  lanId: string;
+  country: string;
+  userId: string;
+  action: AuditAction;
+  activityType: ActivityType;
+  appId?: string;
+  detail: string;
+  sessionId: string;
+  requestCount: number;
+  timestamp: string; // ISO datetime
+}
+
+/** Weekly daily-access report row (BRD 7.5). */
+export interface AccessReportRow {
+  lanId: string;
+  country: string;
+  appId: string;
+  appName: string;
+  role: string;
+  domain: string;
+  subDomain: string;
+  remarks: string;
+  isActive: boolean;
+  date: string;
 }
 
 /* ---------- Learning ---------- */
 export type ContentType = 'tip' | 'prompt' | 'news' | 'showcase';
-/** draft = saved by the author only · submitted = awaiting moderator · published = approved · rejected = returned with feedback. */
-export type ContentStatus = 'draft' | 'submitted' | 'published' | 'rejected';
+/** draft = saved by the author only · submitted = awaiting moderator · published = approved · rejected = returned with feedback · archived = removed from the public feed. */
+export type ContentStatus = 'draft' | 'submitted' | 'published' | 'rejected' | 'archived';
 export type LearnCategory =
   | 'Getting started'
   | 'Prompt craft'
@@ -181,6 +238,11 @@ export interface LearningContent {
   /** Set when AI-assisted content-safety filtering flagged this submission for moderator attention. */
   flagged?: boolean;
   flagReason?: string;
+
+  /** Increments each time a published artifact is edited and resubmitted. */
+  version: number;
+  /** Points at the still-published artifact this is a pending update for; the original stays live until this is approved. */
+  revisionOf?: string;
 }
 
 export type LeaderboardMetric = 'posts' | 'likes';
