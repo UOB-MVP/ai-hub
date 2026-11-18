@@ -25,6 +25,8 @@
 .pw .icon-btn { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); }
 .role-note { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: 10px; background: var(--uob-blue-50); border-left: 3px solid var(--uob-red); font-size: 13px; color: var(--text-2); }
 .role-note strong { color: var(--uob-blue-800); }
+.role-upgrade-note { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 12px; color: var(--uob-blue-700); background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.role-upgrade-note.sent { color: var(--text-2); cursor: default; text-decoration: none; }
 .login-submit { width: 100%; padding: 13px 18px; font-size: 15px; }
 .or { display: flex; align-items: center; gap: 12px; margin: 14px 0; color: var(--text-3); font-size: 12px; text-transform: uppercase; }
 .or::before, .or::after { content: ''; flex: 1; height: 1px; background: var(--border); }

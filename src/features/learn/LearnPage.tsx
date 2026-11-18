@@ -26,7 +26,7 @@ export function LearnPage() {
 
   const published = useMemo(() => items.filter((i) => i.status === 'published'), [items]);
   const mine = useMemo(() => items.filter((i) => i.authorId === user.id), [items, user.id]);
-  const queue = useMemo(() => items.filter((i) => i.status === 'draft' && i.authorId !== user.id), [items, user.id]);
+  const queue = useMemo(() => items.filter((i) => i.status === 'submitted'), [items]);
   const featured = useMemo(() => published.filter((i) => i.featured), [published]);
   const leaderboard = useLeaderboard(items, metric, f.category);
 
@@ -37,8 +37,12 @@ export function LearnPage() {
       .filter((i) => !f.category || i.category === f.category)
       .filter((i) => !f.authorId || i.authorId === f.authorId)
       .filter((i) => !q || `${i.title} ${i.summary} ${i.tags.join(' ')}`.toLowerCase().includes(q))
-      .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-  }, [published, f.view, f.category, f.authorId, f.query]);
+      .sort((a, b) => (
+        f.sort === 'title' ? a.title.localeCompare(b.title)
+          : f.sort === 'likes' ? b.likes - a.likes
+            : b.createdAt.localeCompare(a.createdAt)
+      ));
+  }, [published, f.view, f.category, f.authorId, f.query, f.sort]);
 
   const tabs = [
     { id: 'all' as LearnView, label: 'All', icon: <Layers size={16} />, count: published.length },
@@ -78,7 +82,16 @@ export function LearnPage() {
 
           {isFeed && (
             <>
-              <SearchInput value={f.query} onChange={f.setQuery} placeholder="Search tips, prompts, news and use cases…" />
+              <div className="row" style={{ gap: 12, flexWrap: 'wrap' }}>
+                <span className="grow"><SearchInput value={f.query} onChange={f.setQuery} placeholder="Search tips, prompts, news and use cases…" /></span>
+                <label className="row" style={{ gap: 8, fontSize: 14 }}>Sort
+                  <select value={f.sort} onChange={(e) => f.setSort(e.target.value as typeof f.sort)} style={{ border: '1px solid var(--border)', borderRadius: 10, padding: '6px 10px', background: 'var(--surface)' }}>
+                    <option value="newest">Newest first</option>
+                    <option value="title">Title A–Z</option>
+                    <option value="likes">Most liked</option>
+                  </select>
+                </label>
+              </div>
               {hasFilters && (
                 <div className="filter-bar">
                   <span className="muted small">Filtered by:</span>

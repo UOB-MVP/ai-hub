@@ -3,9 +3,9 @@ import type { Persona, PersonaId } from './types';
 export const PERSONAS: Persona[] = [
   {
     id: 'consumer',
-    label: 'Consumer',
+    label: 'AI Hub User',
     tagline: 'Discover, use and learn',
-    description: 'Browse the catalogue, launch apps you have access to, learn from the community and contribute tips and prompts.',
+    description: 'Default role granted to every bank staff member via SSO. Browse the catalogue, launch apps you have access to, learn from the community and contribute tips and prompts.',
     can: { submitApps: false, manageOwnApps: false, moderateLearning: false, administerPlatform: false },
   },
   {
@@ -19,14 +19,14 @@ export const PERSONAS: Persona[] = [
     id: 'learning-moderator',
     label: 'Learning Moderator',
     tagline: 'Curate and approve learning content',
-    description: 'Review contributions in the queue, approve or reject with feedback, and curate featured learning.',
+    description: 'Granted via AD group membership. Review contributions in the queue, approve or reject with feedback, and curate featured learning.',
     can: { submitApps: false, manageOwnApps: false, moderateLearning: true, administerPlatform: false },
   },
   {
     id: 'platform-admin',
     label: 'Platform Admin',
     tagline: 'Govern the AI Hub',
-    description: 'Full oversight: approve app onboarding, moderate content, and monitor platform adoption and governance.',
+    description: 'Granted via AD group membership. Full oversight: approve app onboarding, moderate content, and monitor platform adoption and governance.',
     can: { submitApps: true, manageOwnApps: true, moderateLearning: true, administerPlatform: true },
   },
 ];

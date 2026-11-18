@@ -8,13 +8,16 @@ import { UsersTab } from './components/UsersTab';
 import { FeaturedTab } from './components/FeaturedTab';
 import { AnnouncementsTab } from './components/AnnouncementsTab';
 import { MonitoringTab } from './components/MonitoringTab';
+import { AccessMatrixTab } from './components/AccessMatrixTab';
+import { AuditLogTab } from './components/AuditLogTab';
+import { LearningManagementTab } from './components/LearningManagementTab';
 
-type Tab = 'apps' | 'users' | 'featured' | 'announcements' | 'monitoring';
+type Tab = 'apps' | 'users' | 'featured' | 'announcements' | 'monitoring' | 'learning-mgmt' | 'audit' | 'matrix';
 
 export function AdminPage() {
   const { items } = useContent();
   const { apps } = usePlatform();
-  const pending = items.filter((i) => i.status === 'draft').length;
+  const pending = items.filter((i) => i.status === 'submitted').length;
   const onboarding = apps.filter((a) => a.lifecycle === 'onboarding').length;
   const [tab, setTab] = useState<Tab>('apps');
 
@@ -30,6 +33,9 @@ export function AdminPage() {
             { id: 'featured' as Tab, label: 'Featured' },
             { id: 'announcements' as Tab, label: 'Announcements' },
             { id: 'monitoring' as Tab, label: 'Monitoring' },
+            { id: 'learning-mgmt' as Tab, label: 'Learning Management', count: pending || undefined },
+            { id: 'audit' as Tab, label: 'Audit Log' },
+            { id: 'matrix' as Tab, label: 'Access Matrix' },
           ]}
           value={tab}
           onChange={setTab}
@@ -40,6 +46,9 @@ export function AdminPage() {
           {tab === 'featured' && <FeaturedTab />}
           {tab === 'announcements' && <AnnouncementsTab />}
           {tab === 'monitoring' && <MonitoringTab />}
+          {tab === 'learning-mgmt' && <LearningManagementTab />}
+          {tab === 'audit' && <AuditLogTab />}
+          {tab === 'matrix' && <AccessMatrixTab />}
         </div>
       </section>
       <section>

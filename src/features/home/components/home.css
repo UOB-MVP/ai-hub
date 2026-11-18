@@ -38,6 +38,14 @@
 .theme-card.locked::after { content: attr(data-tip); position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translate(-50%, 4px); background: var(--uob-blue-900); color: #fff; font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 8px; white-space: nowrap; opacity: 0; pointer-events: none; transition: .15s; z-index: 5; }
 .theme-card.locked:hover::after, .theme-card.locked:focus-visible::after { opacity: 1; transform: translate(-50%, 0); }
 
+.home-search { position: relative; }
+.home-search-panel { position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 20; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+.home-search-group { padding: 6px; }
+.home-search-group + .home-search-group { border-top: 1px solid var(--border); }
+.home-search-group-label { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); padding: 6px 8px 2px; }
+.home-search-row { all: unset; box-sizing: border-box; width: 100%; display: flex; align-items: center; gap: 10px; padding: 8px; border-radius: var(--radius-sm); cursor: pointer; font-size: 14px; }
+.home-search-row:hover, .home-search-row:focus-visible { background: var(--surface-2); }
+
 .featured-apps { display: grid; grid-template-columns: 1.6fr 1fr; gap: 20px; }
 @media (max-width: 860px) { .featured-apps { grid-template-columns: 1fr; } }
 .fa-lead { all: unset; box-sizing: border-box; cursor: pointer; color: #fff; border-radius: var(--radius-lg); padding: 24px 28px; background: linear-gradient(135deg, var(--uob-blue-900), var(--uob-blue-700)); display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden; }

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { ContentType, LearnCategory } from '@/core/types';
 
 export type LearnView = 'all' | ContentType | 'mine' | 'review';
+export type LearnSort = 'newest' | 'title' | 'likes';
 
 /** Single source of truth for everything filterable on the Learn page (feed + leaderboard share it). */
 export function useLearnFilters() {
@@ -9,11 +10,12 @@ export function useLearnFilters() {
   const [category, setCategory] = useState<LearnCategory | null>(null);
   const [authorId, setAuthorId] = useState<string | null>(null);
   const [query, setQuery] = useState('');
+  const [sort, setSort] = useState<LearnSort>('newest');
 
   const toggleCategory = (c: LearnCategory) => setCategory((cur) => (cur === c ? null : c));
   const toggleAuthor = (id: string) => setAuthorId((cur) => (cur === id ? null : id));
   const clear = () => { setCategory(null); setAuthorId(null); setQuery(''); };
 
-  return { view, setView, category, setCategory, toggleCategory, authorId, toggleAuthor, setAuthorId, query, setQuery, clear };
+  return { view, setView, category, setCategory, toggleCategory, authorId, toggleAuthor, setAuthorId, query, setQuery, sort, setSort, clear };
 }
 export type LearnFilters = ReturnType<typeof useLearnFilters>;

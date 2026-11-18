@@ -6,18 +6,20 @@ import type { AiApp } from '@/core/types';
 import { getUser } from '@/data/users';
 import { usePlatform } from '@/core/PlatformContext';
 import { useAppAccess } from '@/core/useAppAccess';
+import { usePersona } from '@/core/PersonaContext';
 import { statusTone } from './AppCard';
 
 interface Props { app: AiApp; hasAccess: boolean; requested: boolean; onClose: () => void; onLaunch: (a: AiApp) => void; onRequest: (a: AiApp) => void }
 
 export function AppDetailModal({ app, hasAccess, requested, onClose, onLaunch, onRequest }: Props) {
   const owner = getUser(app.ownerId);
-  const { feedbackForApp, addFeedback } = usePlatform();
+  const { visibleFeedbackForApp, addFeedback } = usePlatform();
   const { favourites, toggleFavourite, upvoted, toggleUpvote } = useAppAccess();
+  const { user, persona } = usePersona();
   const [more, setMore] = useState(false);
   const [myRating, setMyRating] = useState(0);
   const [comment, setComment] = useState('');
-  const feedback = feedbackForApp(app.id);
+  const feedback = visibleFeedbackForApp(app.id, user.id, persona.can.administerPlatform);
   const isFav = favourites.includes(app.id);
   const hasUpvoted = upvoted.includes(app.id);
 
@@ -90,6 +92,8 @@ export function AppDetailModal({ app, hasAccess, requested, onClose, onLaunch, o
                   <ThumbsUp size={15} fill={hasUpvoted ? 'currentColor' : 'none'} />{app.upvotes}
                 </button>
               </div>
+              {!!app.countries?.length && <div><span>Country</span><strong>{app.countries.join(', ')}</strong></div>}
+              {!!app.languages?.length && <div><span>Language</span><strong>{app.languages.join(', ')}</strong></div>}
             </div>
             {app.whatsNew.length > 0 && (
               <div>
@@ -134,6 +138,9 @@ export function AppDetailModal({ app, hasAccess, requested, onClose, onLaunch, o
             </div>
           ) : (
             <p className="muted" style={{ fontSize: 14 }}>No feedback yet.</p>
+          )}
+          {!persona.can.administerPlatform && app.ownerId !== user.id && (
+            <p className="muted" style={{ fontSize: 12, marginTop: 8 }}>You can only see your own feedback here. The app owner and Platform Admin can see everyone's.</p>
           )}
         </div>
       </div>

@@ -15,6 +15,7 @@ export const APPS: AiApp[] = [
     supportContact: 'recovery-ai-support@uobgroup.com',
     rating: 4.6, ratingCount: 128, upvotes: 86, userCount: 340, health: 'healthy', raiStatus: 'approved',
     tokenUsage30d: 1250000, requests30d: 9800, dau: 62, tokenLimitPerUser: 50000, requestLimitPerUser: 200,
+    countries: ['Singapore', 'Malaysia'], languages: ['English'], sessionTimeoutMinutes: 30,
   },
   {
     id: 'hr-bot', name: 'HR BOT', icon: 'users', hue: 160, featured: true, featuredPriority: 2,
@@ -29,6 +30,8 @@ export const APPS: AiApp[] = [
     supportContact: 'hr-bot-support@uobgroup.com',
     rating: 4.8, ratingCount: 512, upvotes: 340, userCount: 2100, health: 'healthy', raiStatus: 'approved',
     tokenUsage30d: 3400000, requests30d: 41000, dau: 410,
+    countries: ['Singapore', 'Malaysia', 'Indonesia', 'Thailand', 'Vietnam'], languages: ['English', 'Mandarin'], sessionTimeoutMinutes: 45,
+    newBadge: { expiresAt: '2026-11-25' },
   },
   {
     id: 'branch-bot', name: 'Branch BOT', icon: 'branch', hue: 215, featured: true, featuredPriority: 3,
@@ -43,6 +46,7 @@ export const APPS: AiApp[] = [
     supportContact: 'branch-ai-support@uobgroup.com',
     rating: 4.3, ratingCount: 96, upvotes: 54, userCount: 780, health: 'degraded', raiStatus: 'approved',
     tokenUsage30d: 980000, requests30d: 7200, dau: 58, tokenLimitPerUser: 30000, requestLimitPerUser: 150,
+    countries: ['Singapore'], languages: ['English', 'Mandarin'], sessionTimeoutMinutes: 20,
   },
   {
     id: 'doc-intel', name: 'DocIntel', icon: 'file', hue: 100, lifecycle: 'published',
@@ -71,6 +75,7 @@ export const APPS: AiApp[] = [
     supportContact: 'byob-pilot@uobgroup.com',
     rating: 4.1, ratingCount: 18, upvotes: 12, userCount: 45, health: 'healthy', raiStatus: 'pending',
     tokenUsage30d: 85000, requests30d: 420, dau: 9,
+    countries: ['Singapore'], languages: ['English'], newBadge: { expiresAt: '2026-11-30' },
   },
   {
     id: 'equity-helper', name: 'Equity Research Helper', icon: 'chart', hue: 20, placeholder: true, lifecycle: 'onboarding',

@@ -3,6 +3,7 @@ import { AppIcon } from '@/components/ui/AppIcon';
 import { Badge, Button } from '@/components/ui';
 import type { AiApp } from '@/core/types';
 import { useAppAccess } from '@/core/useAppAccess';
+import { isAppNew } from '@/core/PlatformContext';
 import './apps.css';
 
 export const statusTone = (s: AiApp['status']) => (s === 'Live' ? 'green' : s === 'Beta' ? 'amber' : 'grey');
@@ -20,6 +21,7 @@ export function AppCard({ app, onOpen, action, hasAccess = true }: Props) {
   const isFav = favourites.includes(app.id);
   return (
     <article className="card card-hover app-card">
+      {isAppNew(app) && <span className="app-card-new">New</span>}
       <button
         className="icon-btn app-card-fav"
         aria-label={isFav ? `Remove ${app.name} from favourites` : `Add ${app.name} to favourites`}
